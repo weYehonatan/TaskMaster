@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/action_friends"
+        app:showAsAction="always"
+        android:icon="@drawable/friends_icon"
+        android:title="friends" />
+    <item
+        android:id="@+id/action_setting"
+        app:showAsAction="always"
+        android:icon="@drawable/setting_icon"
+        android:title="Sign Out" />
+    <item
+        android:id="@+id/action_SignOut"
+        android:title="Sign Out" />
+
+
+</menu>

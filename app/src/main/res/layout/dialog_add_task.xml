@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/general_screen"
+
+    >
+
+    <Button
+        android:id="@+id/btnDate"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="40dp"
+        android:text="select date"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNewTask_Dialog" />
+
+    <EditText
+        android:id="@+id/etNewTask_Dialog"
+        android:layout_width="205dp"
+        android:layout_height="43dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="103dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="32dp"
+        android:hint="Enter task:"
+        app:layout_constraintBottom_toTopOf="@+id/btnDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/btnSaveNewTask_Dialog"
+        android:layout_width="102dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="161dp"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        tools:ignore="MissingConstraints" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSaveNewTask_Dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDate" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

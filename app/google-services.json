@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "546757108767",
+    "project_id": "taskmaster-27e92",
+    "storage_bucket": "taskmaster-27e92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546757108767:android:a8559d9ae73a06cb33212a",
+        "android_client_info": {
+          "package_name": "yehonatan.weitzman.taskmaster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGgPewfEF4EhgtDZJ-Ws07GxKARDo56wE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
