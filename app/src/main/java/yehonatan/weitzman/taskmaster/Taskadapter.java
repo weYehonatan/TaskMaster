@@ -8,8 +8,10 @@
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.CheckBox;
+        import android.widget.CompoundButton;
         import android.widget.TextView;
         import android.content.Context;
+        import android.widget.Toast;
 
         import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,12 +22,14 @@
                 private Context mCtx;
                 //we are storing all the products in a list
                 private List<ItemTask> productList;
+
                 //getting the context and product list with constructor
                 public Taskadapter(Context mCtx, List<ItemTask> productList)
                 {
-
                     this.mCtx = mCtx;
                     this.productList = productList;
+                    firebasecController = new FirebasecController();
+                    //firebasecController.setContext(mCtx);
 
                 }
 
@@ -42,24 +46,60 @@
             public void onBindViewHolder(TaskViewHolder holder, int position) {
                 //getting the product of the specified position
                 ItemTask product = productList.get(position);
+
+                //product.getIdTask();
+
                 //binding the data with the viewholder views
                 holder.tvName.setText(product.getName());
 
-                holder.checkBox.setChecked(false);
-                if(holder.checkBox.isChecked()){
+                 holder.checkBox.setChecked(false);
+
+                if(holder.checkBox.isChecked()) {
 
                 }
 
+                    // !!!!!!!!!!!!!!!!!!!
+//                נסיון של מחיקת פריט ספציפי, בעיה בשורה 70. המסך קורס בלחציה
+                holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            // קבלת הפריט הנוכחי
+                            ItemTask itemTask = productList.get(position);
+
+                            // מחיקת הפריט מ-Firebase
+                            firebasecController.deleteTask(itemTask.getIdTask());
+
+
+                            // מחיקת הפריט מהרשימה המקומית
+                            productList.remove(position);
+
+                            // עדכון RecyclerView
+                            notifyItemRemoved(position);
+
+                            // הודעת אישור (אופציונלי)
+                            Toast.makeText(mCtx, "משימה נמחקה!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!
+
 
                 if(product.isLate()){
-                 //   holder.tvName.setBackgroundColor(Color.parseColor("#FF0000"));
+                   // holder.tvName.setBackgroundColor(Color.parseColor("#FF0000"));
                     holder.tvLate.setBackgroundColor(Color.parseColor("#FF0000"));
                     holder.tvLate.setText(" Late" );
                 }
                 else{
                     holder.tvLate.setBackgroundColor(Color.parseColor("#008000"));
-                    holder.tvLate.setText( " " );
+                    holder.tvLate.setText( "" );
                 }
+
+
+
 
             }
 

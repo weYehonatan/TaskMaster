@@ -94,8 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //saveTask to Firebase :
                         itemTask = new ItemTask(etNewTask.getText().toString(),SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
                         firebasecController.saveTask(itemTask);
-                        Toast.makeText(this,"Catedory: " + SpinnerControler.getSelected() + " | date: " +  + Dday + "/" + Dmonth +"/" + Dyear ,Toast.LENGTH_LONG).show();
-                       // Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
+                        Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
                         d.dismiss();
                 }
                 else if (v==btnSettingToDialog) {

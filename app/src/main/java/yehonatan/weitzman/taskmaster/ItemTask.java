@@ -11,6 +11,7 @@ public class ItemTask {
     private int dayDate;
     private int monthDate;
     private int yearDate;
+    private String idCreatUser;
 
 
     public ItemTask(String name, String category, int dayDate, int monthDate, int yearDate) {
@@ -22,7 +23,10 @@ public class ItemTask {
         this.monthDate = monthDate;
         this.yearDate = yearDate;
     }
-
+    public ItemTask(String idCreatUser, String idTask){
+        this.idCreatUser =idCreatUser;
+        this.idTask = idTask;
+    }
 
 
     public ItemTask() {

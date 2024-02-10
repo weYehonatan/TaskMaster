@@ -32,6 +32,7 @@ public class SpinnerControler {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    selected = parent.getItemAtPosition(position).toString();
                     Toast.makeText(context, "You selected " + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
                 }
                 @Override

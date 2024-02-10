@@ -25,9 +25,12 @@ import java.util.ArrayList;
 public class FirebasecController {
     private static FirebaseAuth mAuth;
     private Context context;
-
     private static FirebaseDatabase DATABASE;
     private static DatabaseReference REFERENCE;
+
+    public FirebasecController() {
+
+    }
 
 
     public static FirebaseDatabase getDatabase() {
@@ -51,6 +54,7 @@ public class FirebasecController {
             mAuth = FirebaseAuth.getInstance();
         return mAuth;
     }
+
 
 
     // user connect?
@@ -88,6 +92,11 @@ public class FirebasecController {
     public void saveTask(ItemTask itemTask ){
             getReference().child(getAuth().getCurrentUser().getUid()).child("task").push().setValue(itemTask);
     }
+    public void deleteTask(String taskId) {
+        getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId).removeValue();
+    }
+
+
 
 
     public void signInUser (String email, String password){
@@ -143,6 +152,12 @@ public class FirebasecController {
         });
 
     }
+
+    public void saveShereTask(ItemTask itemTask ){
+        getDatabase().getReference("ShereTask").child(getAuth().getCurrentUser().getUid()).push().setValue(itemTask);
+    }
+
+
 
 
 
