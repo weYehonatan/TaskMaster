@@ -1,18 +1,14 @@
 package yehonatan.weitzman.taskmaster;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,7 +17,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -32,12 +35,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView recyclerView;
         Dialog d;
         ImageButton btnNewTaskToDialog,btnSettingToDialog;
-        EditText etNewTask ;
-        Button btnSaveTask,btnDate;
+        EditText etNewTask,etAddCategory ;
+        Button btnSaveTask,btnDate,btnSaveCategory;
         FirebasecController firebasecController;
         User user;
         ItemTask itemTask;
         Spinner spinner;
+        SharedPreferences sp;
+
         int Dday,Dmonth,Dyear;
 
 
@@ -73,11 +78,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 btnNewTaskToDialog = (ImageButton) findViewById(R.id.btnPlus);
                 btnNewTaskToDialog.setOnClickListener(this);
 
+//                ArrayCategory = new ArrayList<String>();
+//                ArrayCategory.add("Home");
+//                ArrayCategory.add("Work");
+//                ArrayCategory.add("Other");
 
+                //        מטרה: שמירת הקטגוריות בSharedPreferences ככה שאם המסתמש יוסיף בהגדרות זה ישמר ולא יתאפס.
+                // ~~~ Sharedpreference  ~~~
                 ArrayCategory = new ArrayList<String>();
-                ArrayCategory.add("Home");
-                ArrayCategory.add("Work");
-                ArrayCategory.add("Other");
+                sp=getSharedPreferences("details1",0);
+                SharedPreferences.Editor editor=sp.edit();
+                String oldCategory = sp.getString("category",null);
+
+                editor.putString("category","Home" + "/" + "Work" + "/" + "Other" +"/");
+                editor.commit();
+
+                String[] parts = oldCategory.split("/");
+                for (String part : parts) {
+                        ArrayCategory.add(part);
+                }
+
+
+
+        }
+        public void addCategory(String newCategory){
+                String str1 = sp.getString("category",null);
+                String str2 = "/" +newCategory;
+                String str3 = str1 + str2;
+                SharedPreferences.Editor editor=sp.edit();
+                editor.putString("category", str3);
+                ArrayCategory.add(newCategory);
+                //         כרגע מוסיף קטגוריה זמנית, אבל לא שומר לפעם הבאה
+
 
         }
 
@@ -108,6 +140,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         DatePickerDialog datePickerDialog = new DatePickerDialog(this,new SetDate(),year,month,day);
                         datePickerDialog.show();
                 }
+                else if (v==btnSaveCategory){
+                        addCategory(etAddCategory.getText().toString());
+                        Toast.makeText(this,"Category saved",Toast.LENGTH_LONG).show();
+                        d.dismiss();
+                }
         }
 // Dialod:
         public void CreatNewTaskDialod(){
@@ -134,6 +171,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 d.setContentView(R.layout.dialog_setting);
                 d.setTitle("setting");
                 d.setCancelable(true);
+                etAddCategory = d.findViewById(R.id.etAddCategory);
+                btnSaveCategory = d.findViewById(R.id.btnSaveNewCategory);
+                btnSaveCategory.setOnClickListener(this);
+
                 d.show();
         }
 
@@ -197,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 return true;
         }
+
 
 
 

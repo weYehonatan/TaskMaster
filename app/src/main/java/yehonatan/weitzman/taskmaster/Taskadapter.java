@@ -1,8 +1,5 @@
         package yehonatan.weitzman.taskmaster;
 
-        import static yehonatan.weitzman.taskmaster.FirebasecController.getAuth;
-        import static yehonatan.weitzman.taskmaster.FirebasecController.getReference;
-
         import android.graphics.Color;
         import android.view.LayoutInflater;
         import android.view.View;
@@ -47,10 +44,11 @@
                 //getting the product of the specified position
                 ItemTask product = productList.get(position);
 
-                //product.getIdTask();
-
                 //binding the data with the viewholder views
-                holder.tvName.setText(product.getName());
+                holder.tvTitle.setText(product.getName() );
+
+                holder.tvCategory.setText(product.getCategory() + " " + product.getDayDate() + "/" + product.getMonthDate() +"/" + product.getYearDate());
+
 
                  holder.checkBox.setChecked(false);
 
@@ -58,8 +56,7 @@
 
                 }
 
-                    // !!!!!!!!!!!!!!!!!!!
-//                נסיון של מחיקת פריט ספציפי, בעיה בשורה 70. המסך קורס בלחציה
+
                 holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -68,8 +65,8 @@
                             ItemTask itemTask = productList.get(position);
 
                             // מחיקת הפריט מ-Firebase
-                            firebasecController.deleteTask(itemTask.getIdTask());
 
+                            firebasecController.deleteTask(itemTask.getIdTask());
 
                             // מחיקת הפריט מהרשימה המקומית
                             productList.remove(position);
@@ -82,10 +79,6 @@
                         }
                     }
                 });
-
-
-
-                // !!!!!!!!!!!!!!!!!!!!!!!!
 
 
                 if(product.isLate()){
@@ -111,11 +104,12 @@
 
 
             class TaskViewHolder extends RecyclerView.ViewHolder {
-                TextView tvName, tvLate;
+                TextView tvTitle, tvLate,tvCategory;
                 CheckBox checkBox;
                 public TaskViewHolder(View itemView) {
                     super(itemView);
-                    tvName = itemView.findViewById(R.id.tvName);
+                    tvTitle = itemView.findViewById(R.id.tvTitle);
+                    tvCategory = itemView.findViewById(R.id.tvCategory);
                     tvLate = itemView.findViewById(R.id.tvLate);
                     checkBox = itemView.findViewById(R.id.checkBox_IsFinish);
                     //checkBox.setOnCheckedChangeListener(mCtx);

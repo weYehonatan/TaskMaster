@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -13,20 +14,18 @@ public class FriandsActivity extends AppCompatActivity {
     ListView lv;
     ArrayList<ItemFriands> fraindsList;
     FriandsAdapter friandsAdapter;
+    TextView tvMyName, tvMyID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friands);
-//
-//        Bitmap home0 = BitmapFactory.decodeResource(getResources(), R.drawable.home0);
-//        Bitmap home1 = BitmapFactory.decodeResource(getResources(), R.drawable.home1);
-//        Bitmap home2 = BitmapFactory.decodeResource(getResources(), R.drawable.home2);
-//        Bitmap light0 = BitmapFactory.decodeResource(getResources(), R.drawable.light0);
-//        Bitmap light1 = BitmapFactory.decodeResource(getResources(), R.drawable.light1);
-//        Bitmap light2 = BitmapFactory.decodeResource(getResources(), R.drawable.light2);
-//        Bitmap phone0 = BitmapFactory.decodeResource(getResources(), R.drawable.phone0);
-//        Bitmap phone1 = BitmapFactory.decodeResource(getResources(), R.drawable.phone1);
-//        Bitmap phone2 = BitmapFactory.decodeResource(getResources(), R.drawable.phone2);
+
+        tvMyName = findViewById(R.id.tvMyName);
+        tvMyID = findViewById(R.id.tvMyID);
+
+
+
+
 
 
         ItemFriands F1 = new ItemFriands("friand 1" ,"cjtu6u65u");

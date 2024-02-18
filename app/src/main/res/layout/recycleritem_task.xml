@@ -6,37 +6,26 @@
     android:layout_height="wrap_content">
 
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="163dp"
+    <CheckBox
+        android:id="@+id/checkBox_IsFinish"
+        android:layout_width="28dp"
         android:layout_height="31dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/checkBox_IsFinish"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/tvLate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:background="#FF0000"
         android:text="Late"
-        app:layout_constraintStart_toEndOf="@+id/tvName"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <CheckBox
-        android:id="@+id/checkBox_IsFinish"
-        android:layout_width="28dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="16dp"
-        android:text=""
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        tools:layout_editor_absoluteX="302dp" />
 
     <View
         android:id="@+id/divider"
@@ -45,6 +34,29 @@
         android:background="?android:attr/listDivider"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="59dp" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:textSize="16sp"
+        android:layout_width="163dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="task title"
+        app:layout_constraintBottom_toTopOf="@+id/tvCategory"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_IsFinish"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCategory"
+        android:textSize="12sp"
+        android:layout_width="163dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="8dp"
+        android:text="task category"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_IsFinish"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

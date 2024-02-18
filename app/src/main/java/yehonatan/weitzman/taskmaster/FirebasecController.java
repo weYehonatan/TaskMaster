@@ -4,6 +4,7 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class FirebasecController {
 
     public static FirebaseAuth getAuth()
     {
-        if(mAuth == null)
+ //       if(mAuth == null)
             mAuth = FirebaseAuth.getInstance();
         return mAuth;
     }
@@ -93,7 +94,8 @@ public class FirebasecController {
             getReference().child(getAuth().getCurrentUser().getUid()).child("task").push().setValue(itemTask);
     }
     public void deleteTask(String taskId) {
-        getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId).removeValue();
+        DatabaseReference myRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
+        myRef.removeValue();
     }
 
 
@@ -140,6 +142,7 @@ public class FirebasecController {
 
                 for(DataSnapshot data:snapshot.getChildren()){
                     ItemTask task1 = data.getValue(ItemTask.class);
+                    task1.setIdTask(data.getKey());
                     taskArrayList.add(task1);
                 }
                 firebaseCallback.callbackTask(taskArrayList);

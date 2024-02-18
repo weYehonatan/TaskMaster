@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,11 +9,49 @@
         android:id="@+id/tvSetting_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="127dp"
         android:text="Setting"
         android:textSize="50sp"
-        tools:layout_editor_absoluteX="104dp"
-        tools:layout_editor_absoluteY="60dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    
+    <TextView
+        android:id="@+id/tvAddCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="46dp"
+        android:text="add Category:"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSetting_dialog" />
+
+    <EditText
+        android:id="@+id/etAddCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="19dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="New Category"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddCategory" />
+
+    <Button
+        android:id="@+id/btnSaveNewCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="12dp"
+        android:text="save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAddCategory" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
