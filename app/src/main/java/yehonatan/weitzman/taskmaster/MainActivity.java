@@ -78,19 +78,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 btnNewTaskToDialog = (ImageButton) findViewById(R.id.btnPlus);
                 btnNewTaskToDialog.setOnClickListener(this);
 
-//                ArrayCategory = new ArrayList<String>();
-//                ArrayCategory.add("Home");
-//                ArrayCategory.add("Work");
-//                ArrayCategory.add("Other");
 
-                //        מטרה: שמירת הקטגוריות בSharedPreferences ככה שאם המסתמש יוסיף בהגדרות זה ישמר ולא יתאפס.
                 // ~~~ Sharedpreference  ~~~
+
                 ArrayCategory = new ArrayList<String>();
                 sp=getSharedPreferences("details1",0);
                 SharedPreferences.Editor editor=sp.edit();
                 String oldCategory = sp.getString("category",null);
-
-                editor.putString("category","Home" + "/" + "Work" + "/" + "Other" +"/");
+                if(oldCategory == null) {
+                        editor.putString("category", "Home" + "/" + "Work" + "/" + "Other" + "/");
+                }
                 editor.commit();
 
                 String[] parts = oldCategory.split("/");
@@ -103,12 +100,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         public void addCategory(String newCategory){
                 String str1 = sp.getString("category",null);
-                String str2 = "/" +newCategory;
+                String str2 = newCategory +"/" ;
                 String str3 = str1 + str2;
                 SharedPreferences.Editor editor=sp.edit();
                 editor.putString("category", str3);
                 ArrayCategory.add(newCategory);
-                //         כרגע מוסיף קטגוריה זמנית, אבל לא שומר לפעם הבאה
+                editor.commit();
 
 
         }

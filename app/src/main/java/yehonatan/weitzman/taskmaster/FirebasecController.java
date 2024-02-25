@@ -156,8 +156,8 @@ public class FirebasecController {
 
     }
 
-    public void saveShereTask(ItemTask itemTask ){
-        getDatabase().getReference("ShereTask").child(getAuth().getCurrentUser().getUid()).push().setValue(itemTask);
+    public void saveShereTask(ItemTask itemTask, String otherUserID ){
+        getDatabase().getReference("ShereTask").child(getAuth().getCurrentUser().getUid()).child(otherUserID).push().setValue(itemTask);
     }
 
 

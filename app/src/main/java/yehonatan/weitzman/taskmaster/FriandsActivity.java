@@ -1,20 +1,29 @@
 package yehonatan.weitzman.taskmaster;
 
+import static yehonatan.weitzman.taskmaster.FirebasecController.getAuth;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class FriandsActivity extends AppCompatActivity {
+public class FriandsActivity extends AppCompatActivity implements View.OnClickListener {
     ListView lv;
     ArrayList<ItemFriands> fraindsList;
     FriandsAdapter friandsAdapter;
     TextView tvMyName, tvMyID;
+    User user;
+    FirebasecController firebasecController;
+    Button btnNewShereTask;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +31,10 @@ public class FriandsActivity extends AppCompatActivity {
 
         tvMyName = findViewById(R.id.tvMyName);
         tvMyID = findViewById(R.id.tvMyID);
+        tvMyID.setText("Your ID: " + getAuth().getCurrentUser().getUid());
 
+        btnNewShereTask = findViewById(R.id.btnNewShereTask);
+        btnNewShereTask.setOnClickListener(this);
 
 
 
@@ -57,5 +69,12 @@ public class FriandsActivity extends AppCompatActivity {
         lv=(ListView)findViewById(R.id.lv);
         lv.setAdapter(friandsAdapter);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == btnNewShereTask){
+
+        }
     }
 }
