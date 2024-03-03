@@ -8,6 +8,9 @@ public class User {
     private String Id;
     private String Email;
     private ArrayList<ItemTask> taskArrayList;
+    private ArrayList<String> myShereTask;
+
+    private ArrayList<String> shereTask;
 
     public User() {
     }
@@ -50,4 +53,21 @@ public class User {
     public void setTaskArrayList(ArrayList<ItemTask> taskArrayList) {
         this.taskArrayList = taskArrayList;
     }
+
+    public ArrayList<String> getMyShereTask() {
+        return myShereTask;
+    }
+
+    public void setMyShereTask(ArrayList<String> myShereTask) {
+        this.myShereTask = myShereTask;
+    }
+
+    public ArrayList<String> getShereTask() {
+        return shereTask;
+    }
+
+    public void setShereTask(ArrayList<String> shereTask) {
+        this.shereTask = shereTask;
+    }
+
 }

@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -82,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // ~~~ Sharedpreference  ~~~
 
                 ArrayCategory = new ArrayList<String>();
-                sp=getSharedPreferences("details1",0);
+                sp=getSharedPreferences("taskMaster",0);
                 SharedPreferences.Editor editor=sp.edit();
                 String oldCategory = sp.getString("category",null);
                 if(oldCategory == null) {
@@ -149,14 +148,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 d.setContentView(R.layout.dialog_add_task);
                 d.setTitle("New TASK");
                 d.setCancelable(true);
-                etNewTask = (EditText) d.findViewById(R.id.etNewTask_Dialog);
-                btnSaveTask = (Button) d.findViewById(R.id.btnSaveNewTask_Dialog);
+                etNewTask = (EditText) d.findViewById(R.id.etNewTask_Dialog_shereTask);
+                btnSaveTask = (Button) d.findViewById(R.id.btnSaveNewTask_Dialog_shereTask);
                 btnSaveTask.setOnClickListener(this);
-                btnDate =d.findViewById(R.id.btnDate);
+                btnDate =d.findViewById(R.id.btnDate_shereTask);
                 btnDate.setOnClickListener(this);
 
 //                //  ~~~~~ spinner ~~~~~
-                spinner = (Spinner) d.findViewById(R.id.spinner);
+                spinner = (Spinner) d.findViewById(R.id.spinner_shereTask);
                 new SpinnerControler(this, spinner, ArrayCategory);
 
                 // ~~~~
@@ -218,8 +217,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //noinspection SimplifiableIfStatement
                 if (id == R.id.action_friends) {
                         Intent intent = new Intent(MainActivity.this, FriandsActivity.class);
+                        String shereCategory = sp.getString("category",null);
+                        intent.putExtra("shereCategory",shereCategory);
                         startActivity(intent);
-                        Toast.makeText(this,"you selected friends",Toast.LENGTH_LONG).show();
+                        Toast.makeText(this,"Shere Task Activity",Toast.LENGTH_LONG).show();
                 }
                 else if(id == R.id.action_setting)
                 {

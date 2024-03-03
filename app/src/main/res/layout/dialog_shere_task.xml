@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/general_screen"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    >
 
     <Button
         android:id="@+id/btnDate_shereTask"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="162dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="43dp"
         android:layout_marginEnd="162dp"
-        android:layout_marginBottom="40dp"
         android:text="select date"
-        app:layout_constraintBottom_toTopOf="@+id/spinner_shereTask"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNewTask_Dialog_shereTask" />
 
@@ -29,15 +25,12 @@
         android:layout_height="43dp"
         android:layout_gravity="center"
         android:layout_marginStart="103dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="103dp"
-        android:layout_marginBottom="32dp"
         android:hint="Enter task:"
-        app:layout_constraintBottom_toTopOf="@+id/btnDate_shereTask"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
         android:id="@+id/btnSaveNewTask_Dialog_shereTask"
@@ -45,11 +38,11 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginStart="161dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="42dp"
         android:layout_marginEnd="161dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintHorizontal_bias="0.307"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_shereTask"
         tools:ignore="MissingConstraints" />
@@ -58,13 +51,47 @@
         android:id="@+id/spinner_shereTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="14dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSaveNewTask_Dialog_shereTask"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnDate_shereTask" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="107dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="108dp"
+        android:text="Shere Task"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tvShowID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="173dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="180dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSaveNewTask_Dialog_shereTask" />
+
+    <Button
+        android:id="@+id/btnCloseDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="162dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvShowID" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -156,16 +156,13 @@ public class FirebasecController {
 
     }
 
-    public void saveShereTask(ItemTask itemTask, String otherUserID ){
-        getDatabase().getReference("ShereTask").child(getAuth().getCurrentUser().getUid()).child(otherUserID).push().setValue(itemTask);
+    public void creatShereTask(ItemTask itemTask ){
+        getReference().child(getAuth().getCurrentUser().getUid()).child("mySereTask").push().setValue(itemTask);
     }
 
-
-
-
-
-
-
+    public void saveShereTask(String creatorID,String itemTaskID ){
+        getReference().child(getAuth().getCurrentUser().getUid()).child("sereTask").child(creatorID).push().setValue(itemTaskID);
+    }
 
 
 }

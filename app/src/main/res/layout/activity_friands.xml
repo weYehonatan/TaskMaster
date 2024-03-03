@@ -7,6 +7,19 @@
     tools:context=".FriandsActivity">
 
 
+    <Button
+        android:id="@+id/btnSerchDialog"
+        android:layout_width="82dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="42dp"
+        android:background="@drawable/baseline_content_paste_search_24"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvFriands"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvFriands"

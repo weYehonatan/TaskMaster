@@ -13,21 +13,19 @@
         android:id="@+id/tvAppName_SignIn"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="123dp"
 
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="81dp"
         android:layout_marginBottom="648dp"
         android:text="TaskMaster"
         android:textColor="#000000"
         android:textSize="45sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.076" />
-
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tvSignIn"
@@ -50,11 +48,10 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="55dp"
-        android:layout_marginTop="79dp"
+        android:layout_marginTop="74dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginBottom="408dp"
         android:hint="Email:"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
