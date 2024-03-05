@@ -119,11 +119,16 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             datePickerDialog.show();
         } else if (v== btnSaveNewTask_Dialog_shereTask) {
             ItemTask itemTask = new ItemTask(etNewTask_Dialog_shereTask.getText().toString(),SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
-            firebasecController.creatShereTask(itemTask);
+            String idTask = firebasecController.creatShereTask(itemTask);
             Toast.makeText(this,"The task has been added! Don't forget to copy and share the task:)",Toast.LENGTH_LONG).show();
-            tvShowID.setText(getAuth().getCurrentUser().getUid() + "/" + itemTask.getIdTask());
+            tvShowID.setText(getAuth().getCurrentUser().getUid() + "/" + idTask);
         } else if (v == btnCloseDialog) {
             d.dismiss();
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_TEXT,tvShowID.getText().toString());
+            intent.setType("text/plain");
+            intent.setPackage("com.whatsapp");
+            startActivity(intent);
         }
         else if(v==btnSerchDialog){
             CreatSearchTaskDialod();
