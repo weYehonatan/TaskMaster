@@ -58,6 +58,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         btnSerchDialog.setOnClickListener(this);
 
         firebasecController = new FirebasecController(this);
+        firebasecController.readShereTask( this);
 
 
 
@@ -177,6 +178,11 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         d.show();
 
     }
+
+//    @Override
+//    public void callbackShereTask(ArrayList<ItemTask> taskList) {
+//
+//    }
 
         public  class SetDate implements DatePickerDialog.OnDateSetListener
     {

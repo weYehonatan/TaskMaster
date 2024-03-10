@@ -1,7 +1,9 @@
 package yehonatan.weitzman.taskmaster;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 firebasecController = new FirebasecController(this);
                 firebasecController.readTask(this);
                 firebasecController.readUser(this);
+                firebasecController.readShereTask(this);
                 user = new User();
 
                 //initializing the productlist
@@ -124,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         firebasecController.saveTask(itemTask);
                         Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
                         d.dismiss();
+                        Intent intent = new Intent(this,aaReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC,System.currentTimeMillis()+4000,pendingIntent);
                 }
                 else if (v==btnSettingToDialog) {
                         CreatSettingDialod();
@@ -140,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         addCategory(etAddCategory.getText().toString());
                         Toast.makeText(this,"Category saved",Toast.LENGTH_LONG).show();
                         d.dismiss();
+
                 }
         }
 // Dialod:
@@ -191,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //setting adapter to recyclerview
                 recyclerView.setAdapter(adapter);
         }
+
 
         public  class SetDate implements DatePickerDialog.OnDateSetListener
         {

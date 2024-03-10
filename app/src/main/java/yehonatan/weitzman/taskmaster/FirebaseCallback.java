@@ -13,4 +13,5 @@ public interface FirebaseCallback {
 
     void callbackUser(User user);
     void callbackTask(ArrayList<ItemTask> taskList);
+    //void callbackShereTask(ArrayList<ItemTask> taskList);
 }

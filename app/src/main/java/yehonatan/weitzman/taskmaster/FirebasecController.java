@@ -1,11 +1,7 @@
 package yehonatan.weitzman.taskmaster;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -159,14 +155,36 @@ public class FirebasecController {
 
 public String creatShereTask(ItemTask itemTask) {
         // save the sher task + return the idTask
-    String idTask = getReference().child(getAuth().getCurrentUser().getUid()).child("mySereTask").push().getKey();
-    getReference().child(getAuth().getCurrentUser().getUid()).child("mySereTask").child(idTask).setValue(itemTask);
+    String idTask = getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").push().getKey();
+    getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").child(idTask).setValue(itemTask);
     return idTask;
 }
 
 
     public void saveShereTask(String creatorID,String itemTaskID ){
-        getReference().child(getAuth().getCurrentUser().getUid()).child("sereTask").child(creatorID).push().setValue(itemTaskID);
+        getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
+    }
+    public void readShereTask(FriandsActivity firebaseCallback){
+        getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                ArrayList<ItemTask> taskArrayList = new ArrayList<>();
+
+                for(DataSnapshot data:snapshot.getChildren()){
+                    ItemTask task1 = data.getValue(ItemTask.class);
+                    task1.setIdTask(data.getKey());
+                    taskArrayList.add(task1);
+                }
+                firebaseCallback.callbackTask(taskArrayList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
 
