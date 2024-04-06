@@ -22,20 +22,20 @@ public class aaReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d("===","====");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationChannel channel1 = new NotificationChannel("TaskMaster", "Task Master", NotificationManager.IMPORTANCE_HIGH);
+                    NotificationChannel channel1 = new NotificationChannel("TaskMaster", "TaskMaster", NotificationManager.IMPORTANCE_HIGH);
                     channel1.setDescription("Task Master...");
                     NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.createNotificationChannel(channel1);
                 }
-                Notification notification = new NotificationCompat.Builder(context, "channel").
-                        //setSmallIcon(R.drawable.baseline_drive_eta_24)
+                Notification notification = new NotificationCompat.Builder(context, "TaskMaster").
                         setContentTitle("title").setContentText("this is a Notification :)").
+                        setSmallIcon(R.drawable.baseline_crisis_alert_24).
                         setPriority(NotificationCompat.PRIORITY_HIGH).build();
 
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                        // ((Activity) context).requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.FOREGROUND_SERVICE}, 100);
+                    //   ((Activity) context).requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.FOREGROUND_SERVICE}, 100);
                         return;
                     }
                 }

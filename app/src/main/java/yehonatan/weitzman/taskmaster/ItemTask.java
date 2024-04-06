@@ -13,7 +13,9 @@ public class ItemTask {
     private int yearDate;
     private String idCreatUser;
 
+     public ItemTask(){
 
+     }
     public ItemTask(String name, String category, int dayDate, int monthDate, int yearDate) {
         this.name = name;
         this.finish = false;
@@ -28,9 +30,14 @@ public class ItemTask {
         this.idTask = idTask;
     }
 
-
-    public ItemTask() {
-
+    public ItemTask(String name, boolean finish, boolean late, String category, int dayDate, int monthDate, int yearDate) {
+        this.name = name;
+        this.finish = finish;
+        this.late = late;
+        this.category = category;
+        this.dayDate = dayDate;
+        this.monthDate = monthDate;
+        this.yearDate = yearDate;
     }
 
     public String getName() {

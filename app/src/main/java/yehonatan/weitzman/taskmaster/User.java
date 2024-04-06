@@ -1,15 +1,15 @@
 package yehonatan.weitzman.taskmaster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class User {
+public class User implements Serializable {
     private String name;
     private String Id;
     private String Email;
     private ArrayList<ItemTask> taskArrayList;
-    private ArrayList<String> myShereTask;
-
+    private ArrayList<ItemTask> myShereTask;
     private ArrayList<String> shereTask;
 
     public User() {
@@ -19,6 +19,13 @@ public class User {
         this.name = name;
         this.Id = uId;
         this.Email = uEmail;
+    }
+
+    public User(String name, String uId, String uEmail,ArrayList<ItemTask> myShereTask ) {
+        this.name = name;
+        this.Id = uId;
+        this.Email = uEmail;
+        this.myShereTask = myShereTask;
     }
 
 
@@ -54,11 +61,11 @@ public class User {
         this.taskArrayList = taskArrayList;
     }
 
-    public ArrayList<String> getMyShereTask() {
+    public ArrayList<ItemTask> getMyShereTask() {
         return myShereTask;
     }
 
-    public void setMyShereTask(ArrayList<String> myShereTask) {
+    public void setMyShereTask(ArrayList<ItemTask> myShereTask) {
         this.myShereTask = myShereTask;
     }
 

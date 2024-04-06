@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 firebasecController = new FirebasecController(this);
                 firebasecController.readTask(this);
                 firebasecController.readUser(this);
-                firebasecController.readShereTask(this);
+               // firebasecController.readShereTask(this);
                 user = new User();
 
                 //initializing the productlist
@@ -186,9 +186,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // read from firebase:
         @Override
-        public void callbackUser(User user) {
+        public void callbackUser(String user) {
 
-                tvName.setText(user.getName());
+                tvName.setText(user);
         }
 
         @Override
@@ -198,6 +198,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Taskadapter adapter = new Taskadapter(this, productList);
                 //setting adapter to recyclerview
                 recyclerView.setAdapter(adapter);
+        }
+
+        @Override
+        public void callbackShereTask(ArrayList<ItemTask> taskList) {
+
         }
 
 

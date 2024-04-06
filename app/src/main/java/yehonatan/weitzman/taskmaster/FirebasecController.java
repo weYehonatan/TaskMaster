@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class FirebasecController {
     private static FirebaseAuth mAuth;
@@ -114,10 +115,10 @@ public class FirebasecController {
 
     // readUser:
     public void readUser(FirebaseCallback firebaseCallback){
-        getReference().child(getAuth().getUid()).addValueEventListener(new ValueEventListener() {
+        getReference().child(getAuth().getUid()).child("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
+                String user = snapshot.getValue(String.class);
                 firebaseCallback.callbackUser(user);
             }
 
@@ -160,11 +161,12 @@ public String creatShereTask(ItemTask itemTask) {
     return idTask;
 }
 
-
+    
     public void saveShereTask(String creatorID,String itemTaskID ){
         getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
     }
-    public void readShereTask(FriandsActivity firebaseCallback){
+
+    public void readShereTask(FirebaseCallback firebaseCallback){
         getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -176,7 +178,8 @@ public String creatShereTask(ItemTask itemTask) {
                     task1.setIdTask(data.getKey());
                     taskArrayList.add(task1);
                 }
-                firebaseCallback.callbackTask(taskArrayList);
+                firebaseCallback.callbackShereTask(taskArrayList);
+
             }
 
             @Override
@@ -184,6 +187,27 @@ public String creatShereTask(ItemTask itemTask) {
 
             }
         });
+
+    }
+
+    public static boolean checkDay(ItemTask task){
+        int year = task.getYearDate();
+        int month = task.getMonthDate();
+        int day = task.getDayDate();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year, Calendar.MONTH, month, Calendar.DAY_OF_MONTH, day);
+        long definedDate = calendar.getTimeInMillis();
+        long currentDate = Calendar.getInstance().getTimeInMillis();
+
+        if (definedDate < currentDate) {
+            // התאריך שהוגדר עבר את היום הנוכחי
+            return true;
+        } else {
+            // התאריך שהוגדר טרם הגיע
+            return false;
+        }
+
 
     }
 

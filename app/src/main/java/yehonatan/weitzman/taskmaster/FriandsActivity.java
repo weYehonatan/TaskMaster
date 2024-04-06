@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,9 +25,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class FriandsActivity extends AppCompatActivity implements View.OnClickListener {
+public class FriandsActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
     ListView lv;
-    ArrayList<ItemFriands> fraindsList;
+    ArrayList<ItemTask> fraindsList;
     FriandsAdapter friandsAdapter;
     TextView tvMyName, tvMyID,tvShowID;
     User user;
@@ -58,40 +59,18 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         btnSerchDialog.setOnClickListener(this);
 
         firebasecController = new FirebasecController(this);
-        firebasecController.readShereTask( this);
+        firebasecController.readShereTask(this);
 
 
+        ItemTask t1 = new ItemTask("task_1", "home", 11, 11, 2011);
+        fraindsList = new ArrayList<ItemTask>();
+        fraindsList.add(t1);
 
-
-
-        ItemFriands F1 = new ItemFriands("friand 1" ,"cjtu6u65u");
-        ItemFriands F2 = new ItemFriands("friand 2","hsr6uutrh");
-        ItemFriands F3 = new ItemFriands("friand 3","5755hhf");
-        ItemFriands F4 = new ItemFriands("friand 4","hfj7676");
-        ItemFriands F5 = new ItemFriands("friand 5","jkmcg 76");
-        ItemFriands F6 = new ItemFriands("friand 6","jddfj6555");
-        ItemFriands F7 = new ItemFriands("friand 7","jtjtj555675745");
-        ItemFriands F8 = new ItemFriands("friand 8","fhnfjk7677");
-        ItemFriands F9 = new ItemFriands("friand 9","drsseg5");
-        ItemFriands F10 = new ItemFriands("friand 10","drs545seg5");
-        ItemFriands F11 = new ItemFriands("friand 11","bf666");
-        ItemFriands F12 = new ItemFriands("friand 12","bzddbrt5");
-        ItemFriands F13 = new ItemFriands("friand 13","bzdhd");
-        ItemFriands F14 = new ItemFriands("friand 14","bbnfxn");
-
-        //phase 2 - add to array list
-        fraindsList = new ArrayList<ItemFriands>();
-        fraindsList.add(F1);fraindsList.add(F2);fraindsList.add(F3);
-        fraindsList.add(F4);fraindsList.add(F5);fraindsList.add(F6);
-        fraindsList.add(F7);fraindsList.add(F8);fraindsList.add(F9);
-        fraindsList.add(F10);fraindsList.add(F11);fraindsList.add(F12);
-        fraindsList.add(F13);fraindsList.add(F14);
-
-        //phase 3 - create adapter
+        // - create adapter
         friandsAdapter=new FriandsAdapter(this,0,0,fraindsList);
         //phase 4 reference to listview
         lv=(ListView)findViewById(R.id.lv);
-        lv.setAdapter(friandsAdapter);
+        //lv.setAdapter(friandsAdapter);
 
 
 //         spiner:
@@ -179,12 +158,9 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-//    @Override
-//    public void callbackShereTask(ArrayList<ItemTask> taskList) {
-//
-//    }
 
-        public  class SetDate implements DatePickerDialog.OnDateSetListener
+
+    public  class SetDate implements DatePickerDialog.OnDateSetListener
     {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -195,6 +171,23 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             Dday =dayOfMonth;
         }
     }
+    @Override
+    public void callbackShereTask(ArrayList<ItemTask> taskList) {
+        friandsAdapter=new FriandsAdapter(this,0,0,taskList);
+        lv.setAdapter(friandsAdapter);
+    }
+
+
+
+    @Override
+    public void callbackUser(String user) {}
+    @Override
+    public void callbackTask(ArrayList<ItemTask> taskList) {}
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {}
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
+
 
 
 }

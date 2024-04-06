@@ -80,9 +80,14 @@
                     }
                 });
 
+                if(firebasecController.checkDay(product) == true){
+
+                    product.setLate(true);
+                }
+
+
 
                 if(product.isLate()){
-                   // holder.tvName.setBackgroundColor(Color.parseColor("#FF0000"));
                     holder.tvLate.setBackgroundColor(Color.parseColor("#FF0000"));
                     holder.tvLate.setText(" Late" );
                 }
