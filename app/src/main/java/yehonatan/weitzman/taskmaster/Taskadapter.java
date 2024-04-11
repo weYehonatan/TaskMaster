@@ -93,7 +93,7 @@
                 }
                 else{
                     holder.tvLate.setBackgroundColor(Color.parseColor("#008000"));
-                    holder.tvLate.setText( "" );
+                    holder.tvLate.setText( "check date" );
                 }
 
 

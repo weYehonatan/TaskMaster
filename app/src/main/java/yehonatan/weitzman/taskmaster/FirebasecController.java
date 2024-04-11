@@ -46,26 +46,22 @@ public class FirebasecController {
         this.context = context;
     }
 
-    public static FirebaseAuth getAuth()
-    {
- //       if(mAuth == null)
-            mAuth = FirebaseAuth.getInstance();
+    public static FirebaseAuth getAuth() {
+        //       if(mAuth == null)
+        mAuth = FirebaseAuth.getInstance();
         return mAuth;
     }
 
 
-
     // user connect?
-    public boolean currentUser()
-    {
-        FirebaseUser isFbUser= getAuth().getCurrentUser();
-        if(isFbUser!=null)
+    public boolean currentUser() {
+        FirebaseUser isFbUser = getAuth().getCurrentUser();
+        if (isFbUser != null)
             return true;
         return false;
     }
 
-    public void LogOut()
-    {
+    public void LogOut() {
         getAuth().signOut();
         context.startActivity(new Intent(context, OpeningActivity.class));
     }
@@ -76,37 +72,39 @@ public class FirebasecController {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            User user = new User(userName, task.getResult().getUser().getUid() ,email);
+                            User user = new User(userName, task.getResult().getUser().getUid(), email);
                             getReference().child(user.getId()).setValue(user); // save in Realtime Database
 
-                            Intent intent=new Intent(context,MainActivity.class);
+                            Intent intent = new Intent(context, MainActivity.class);
                             context.startActivity(intent);
-                        } else {;
+                        } else {
+                            ;
                             Toast.makeText(context, "" + task.getException(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-    public void saveTask(ItemTask itemTask ){
-            getReference().child(getAuth().getCurrentUser().getUid()).child("task").push().setValue(itemTask);
+
+    public void saveTask(ItemTask itemTask) {
+        getReference().child(getAuth().getCurrentUser().getUid()).child("task").push().setValue(itemTask);
     }
+
     public void deleteTask(String taskId) {
         DatabaseReference myRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
         myRef.removeValue();
     }
 
 
-
-
-    public void signInUser (String email, String password){
+    public void signInUser(String email, String password) {
         getAuth().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Intent intent=new Intent(context,MainActivity.class);
+                            Intent intent = new Intent(context, MainActivity.class);
                             context.startActivity(intent);
-                        } else {;
+                        } else {
+                            ;
                             Toast.makeText(context, "" + task.getException(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -114,7 +112,7 @@ public class FirebasecController {
     }
 
     // readUser:
-    public void readUser(FirebaseCallback firebaseCallback){
+    public void readUser(FirebaseCallback firebaseCallback) {
         getReference().child(getAuth().getUid()).child("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -130,14 +128,14 @@ public class FirebasecController {
 
     }
 
-    public void readTask(FirebaseCallback firebaseCallback){
+    public void readTask(FirebaseCallback firebaseCallback) {
         getReference().child(getAuth().getCurrentUser().getUid()).child("task").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 ArrayList<ItemTask> taskArrayList = new ArrayList<>();
 
-                for(DataSnapshot data:snapshot.getChildren()){
+                for (DataSnapshot data : snapshot.getChildren()) {
                     ItemTask task1 = data.getValue(ItemTask.class);
                     task1.setIdTask(data.getKey());
                     taskArrayList.add(task1);
@@ -154,26 +152,26 @@ public class FirebasecController {
     }
 
 
-public String creatShereTask(ItemTask itemTask) {
+    public String creatShereTask(ItemTask itemTask) {
         // save the sher task + return the idTask
-    String idTask = getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").push().getKey();
-    getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").child(idTask).setValue(itemTask);
-    return idTask;
-}
+        String idTask = getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").push().getKey();
+        getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").child(idTask).setValue(itemTask);
+        return idTask;
+    }
 
-    
-    public void saveShereTask(String creatorID,String itemTaskID ){
+
+    public void saveShereTask(String creatorID, String itemTaskID) {
         getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
     }
 
-    public void readShereTask(FirebaseCallback firebaseCallback){
+    public void readShereTask(FirebaseCallback firebaseCallback) {
         getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 ArrayList<ItemTask> taskArrayList = new ArrayList<>();
 
-                for(DataSnapshot data:snapshot.getChildren()){
+                for (DataSnapshot data : snapshot.getChildren()) {
                     ItemTask task1 = data.getValue(ItemTask.class);
                     task1.setIdTask(data.getKey());
                     taskArrayList.add(task1);
@@ -190,25 +188,39 @@ public String creatShereTask(ItemTask itemTask) {
 
     }
 
-    public static boolean checkDay(ItemTask task){
+    public static boolean checkDay(ItemTask task) {
         int year = task.getYearDate();
         int month = task.getMonthDate();
         int day = task.getDayDate();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year, Calendar.MONTH, month, Calendar.DAY_OF_MONTH, day);
-        long definedDate = calendar.getTimeInMillis();
-        long currentDate = Calendar.getInstance().getTimeInMillis();
+        Calendar systemCalender = Calendar.getInstance();
+        DateItem currentDate = new DateItem(systemCalender.get(Calendar.YEAR),systemCalender.get(Calendar.MONTH),systemCalender.get(Calendar.DAY_OF_MONTH));
+        DateItem taskDate = new DateItem(year,month,day);
 
-        if (definedDate < currentDate) {
-            // התאריך שהוגדר עבר את היום הנוכחי
-            return true;
-        } else {
-            // התאריך שהוגדר טרם הגיע
+        if(currentDate.getYear() > taskDate.getYear()){
+         return true;
+        }
+        else if (currentDate.getYear() < taskDate.getYear()) {
             return false;
         }
-
-
+        else {
+            if (currentDate.getMonth() > taskDate.getMonth()){
+                return true;
+            }
+            else if (currentDate.getMonth() < taskDate.getMonth()) {
+                return false;
+            }
+            else {
+                if (currentDate.getDay() > taskDate.getDay()){
+                    return true;
+                }
+                else if (currentDate.getDay() < taskDate.getDay()) {
+                    // בגדול לא צריך את זה
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
 
