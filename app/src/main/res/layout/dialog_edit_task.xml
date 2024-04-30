@@ -3,77 +3,80 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/general_screen"
-
-    >
+    android:layout_height="match_parent">
 
 
     <Button
         android:id="@+id/btnEditDate"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="162dp"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="162dp"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="71dp"
+        android:layout_marginEnd="105dp"
         android:text="select date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
 
     <EditText
         android:id="@+id/tvEditTask"
         android:layout_width="205dp"
         android:layout_height="43dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="103dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="103dp"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="125dp"
         android:hint="Enter task:"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.568"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etDescription"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvDescription"
+        android:layout_width="205dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="133dp"
-        android:hint="enter description:"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginEnd="125dp"
+        android:hint="Description Task:"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEditTask" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnSaveEditTask"
         android:layout_width="102dp"
         android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="74dp"
-        android:layout_marginEnd="161dp"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="86dp"
         android:text="Save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerEdit"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerEdit" />
 
     <Spinner
         android:id="@+id/spinnerEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_width="220dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="96dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnEditDate" />
+
+    <Button
+        android:id="@+id/btnCancelTask"
+        android:layout_width="102dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="86dp"
+        android:layout_marginEnd="57dp"
+        android:text="cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerEdit" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

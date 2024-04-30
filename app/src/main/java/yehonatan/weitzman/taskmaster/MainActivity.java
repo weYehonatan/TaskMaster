@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView recyclerView;
         Dialog d;
         ImageButton btnNewTaskToDialog,btnSettingToDialog;
-        EditText etNewTask,etAddCategory ;
+        EditText etNewTask,etAddCategory,etDescription ;
         Button btnSaveTask,btnDate,btnSaveCategory;
         FirebasecController firebasecController;
         User user;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //initializing the productlist
                 productList = new ArrayList<>();
-                ItemTask t1 = new ItemTask("task_1", "home", 11, 11, 2011);
+                ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
                 //phase 2 - add to array list
                 productList = new ArrayList<ItemTask>();
                 productList.add(t1);
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-        }
+                }
         public void addCategory(String newCategory){
                 String str1 = sp.getString("category",null);
                 String str2 = newCategory +"/" ;
@@ -108,9 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.putString("category", str3);
                 ArrayCategory.add(newCategory);
                 editor.commit();
-
-
         }
+
 
 
 
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else if ( v == btnSaveTask)
                 {
                         //saveTask to Firebase :
-                        itemTask = new ItemTask(etNewTask.getText().toString(),SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
+                        itemTask = new ItemTask(etNewTask.getText().toString(),etDescription.getText().toString(),SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
                         firebasecController.saveTask(itemTask);
                         Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
                         d.dismiss();
@@ -149,28 +148,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         d.dismiss();
 
                 }
+
         }
-// Dialod:
+
+
+        // Dialod:
         public void CreatNewTaskDialod(){
                 d = new Dialog(this);
                 d.setContentView(R.layout.dialog_add_task);
                 d.setTitle("New TASK");
                 d.setCancelable(true);
-                etNewTask = (EditText) d.findViewById(R.id.etNewTask_Dialog_shereTask);
-                btnSaveTask = (Button) d.findViewById(R.id.btnSaveNewTask_Dialog_shereTask);
+                etNewTask = (EditText) d.findViewById(R.id.tvEditTask);
+                etDescription = (EditText) d.findViewById(R.id.etDescription);
+                btnSaveTask = (Button) d.findViewById(R.id.btnSaveEditTask);
                 btnSaveTask.setOnClickListener(this);
-                btnDate =d.findViewById(R.id.btnDate_shereTask);
+                btnDate =d.findViewById(R.id.btnEditDate);
                 btnDate.setOnClickListener(this);
 
 //                //  ~~~~~ spinner ~~~~~
-                spinner = (Spinner) d.findViewById(R.id.spinner_shereTask);
+                spinner = (Spinner) d.findViewById(R.id.spinnerEdit);
                 new SpinnerControler(this, spinner, ArrayCategory);
 
                 // ~~~~
                 d.show();
         }
 
-        public void CreatSettingDialod(){
+
+                public void CreatSettingDialod(){
                 d = new Dialog(this);
                 d.setContentView(R.layout.dialog_setting);
                 d.setTitle("setting");

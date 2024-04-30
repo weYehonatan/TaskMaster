@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class ItemTask {
     private String name;
-    private boolean finish;
+    private String description;
+   // private boolean finish;
     private boolean late;
     private String category;
     private String idTask;
@@ -16,9 +17,10 @@ public class ItemTask {
      public ItemTask(){
 
      }
-    public ItemTask(String name, String category, int dayDate, int monthDate, int yearDate) {
+    public ItemTask(String name,String description, String category, int dayDate, int monthDate, int yearDate) {
         this.name = name;
-        this.finish = false;
+        this.description = description;
+       // this.finish = false;
         this.late = false;
         this.category = category;
         this.dayDate = dayDate;
@@ -32,7 +34,7 @@ public class ItemTask {
 
     public ItemTask(String name, boolean finish, boolean late, String category, int dayDate, int monthDate, int yearDate) {
         this.name = name;
-        this.finish = finish;
+     //   this.finish = finish;
         this.late = late;
         this.category = category;
         this.dayDate = dayDate;
@@ -48,13 +50,28 @@ public class ItemTask {
         this.name = name;
     }
 
-    public boolean isFinish() {
-        return finish;
+    public String getDescription() {
+        return description;
     }
 
-    public void setFinish(boolean finish) {
-        this.finish = finish;
+    public void setDescription(String description) {
+        this.description = description;
     }
+
+    public String getIdCreatUser() {
+        return idCreatUser;
+    }
+
+    public void setIdCreatUser(String idCreatUser) {
+        this.idCreatUser = idCreatUser;
+    }
+    //    public boolean isFinish() {
+//        return finish;
+//    }
+
+//    public void setFinish(boolean finish) {
+//        this.finish = finish;
+//    }
 
     public String getCategory() {
         return category;

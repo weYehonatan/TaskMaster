@@ -4,13 +4,10 @@ import static yehonatan.weitzman.taskmaster.FirebasecController.getAuth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -62,7 +59,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         firebasecController.readShereTask(this);
 
 
-        ItemTask t1 = new ItemTask("task_1", "home", 11, 11, 2011);
+        ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
         fraindsList = new ArrayList<ItemTask>();
         fraindsList.add(t1);
 
@@ -98,7 +95,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,new FriandsActivity.SetDate(),year,month,day);
             datePickerDialog.show();
         } else if (v== btnSaveNewTask_Dialog_shereTask) {
-            ItemTask itemTask = new ItemTask(etNewTask_Dialog_shereTask.getText().toString(),SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
+            ItemTask itemTask = new ItemTask(etNewTask_Dialog_shereTask.getText().toString(),null,SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
             String idTask = firebasecController.creatShereTask(itemTask);
             Toast.makeText(this,"The task has been added! Don't forget to copy and share the task:)",Toast.LENGTH_LONG).show();
             tvShowID.setText(getAuth().getCurrentUser().getUid() + "/" + idTask);
@@ -129,10 +126,10 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         d.setContentView(R.layout.dialog_shere_task);
         d.setTitle("Shere TASK");
         d.setCancelable(true);
-        etNewTask_Dialog_shereTask = (EditText) d.findViewById(R.id.etNewTask_Dialog_shereTask);
-        btnDate_shereTask = (Button) d.findViewById(R.id.btnDate_shereTask);
+        etNewTask_Dialog_shereTask = (EditText) d.findViewById(R.id.tvEditTask);
+        btnDate_shereTask = (Button) d.findViewById(R.id.btnEditDate);
         btnDate_shereTask.setOnClickListener(this);
-        btnSaveNewTask_Dialog_shereTask = (Button) d.findViewById(R.id.btnSaveNewTask_Dialog_shereTask);
+        btnSaveNewTask_Dialog_shereTask = (Button) d.findViewById(R.id.btnSaveEditTask);
         btnSaveNewTask_Dialog_shereTask.setOnClickListener(this);
         tvShowID = d.findViewById(R.id.tvShowID);
         btnCloseDialog = d.findViewById(R.id.btnCloseDialog);
@@ -141,7 +138,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
 
 
                //  ~~~~~ spinner ~~~~~
-        spinner_shereTask = (Spinner) d.findViewById(R.id.spinner_shereTask);
+        spinner_shereTask = (Spinner) d.findViewById(R.id.spinnerEdit);
         new SpinnerControler(this, spinner_shereTask, ArrayCategory);
         d.show();
 

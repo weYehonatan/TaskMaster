@@ -153,9 +153,11 @@ public class FirebasecController {
 
 
     public String creatShereTask(ItemTask itemTask) {
+        // כבר לא רלוונטי
         // save the sher task + return the idTask
-        String idTask = getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").push().getKey();
-        getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").child(idTask).setValue(itemTask);
+       String idTask = getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").push().getKey();
+       getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").child(idTask).setValue(itemTask);
+
         return idTask;
     }
 
@@ -165,7 +167,9 @@ public class FirebasecController {
     }
 
     public void readShereTask(FirebaseCallback firebaseCallback) {
-        getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").addValueEventListener(new ValueEventListener() {
+        // כבר לא רלוונטי
+
+            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -179,8 +183,7 @@ public class FirebasecController {
                 firebaseCallback.callbackShereTask(taskArrayList);
 
             }
-
-            @Override
+                @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
@@ -194,8 +197,9 @@ public class FirebasecController {
         int day = task.getDayDate();
 
         Calendar systemCalender = Calendar.getInstance();
-        DateItem currentDate = new DateItem(systemCalender.get(Calendar.YEAR),systemCalender.get(Calendar.MONTH),systemCalender.get(Calendar.DAY_OF_MONTH));
+        DateItem currentDate = new DateItem(systemCalender.get(Calendar.YEAR),systemCalender.get(Calendar.MONTH)+1,systemCalender.get(Calendar.DAY_OF_MONTH));
         DateItem taskDate = new DateItem(year,month,day);
+        // היה דילי של חודש בדיוק בcurrentDate לכן עשיתי "+1" (שורה 197)
 
         if(currentDate.getYear() > taskDate.getYear()){
          return true;
@@ -222,6 +226,34 @@ public class FirebasecController {
         }
         return false;
     }
+
+
+    public void updateTask(String taskId, ItemTask updatedTask,Context mCtx ) {
+        DatabaseReference taskRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
+        // עדכון המשימה בבסיס הנתונים
+        taskRef.setValue(updatedTask)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(mCtx, "המשימה עודכנה בהצלחה", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mCtx, "שגיאה בעדכון המשימה", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
