@@ -57,8 +57,7 @@ public class FriandsAdapter extends ArrayAdapter<ItemTask> {
                     ItemTask itemTask = objects.get(position);
 
                     // מחיקת הפריט מ-Firebase
-
-                    firebasecController.deleteTask(itemTask.getIdTask());
+                    firebasecController.deleteShereTask(itemTask.getIdCreatUser(),itemTask.getIdTask());
 
                     // מחיקת הפריט מהרשימה המקומית
                     objects.remove(position);

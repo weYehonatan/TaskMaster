@@ -25,6 +25,7 @@ import java.util.Calendar;
 public class FriandsActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
     ListView lv;
     ArrayList<ItemTask> fraindsList;
+    ArrayList<String> idUserList;
     FriandsAdapter friandsAdapter;
     TextView tvMyName, tvMyID,tvShowID;
     User user;
@@ -56,8 +57,17 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         btnSerchDialog.setOnClickListener(this);
 
         firebasecController = new FirebasecController(this);
-        firebasecController.readShereTask(this);
 
+        idUserList = new ArrayList<String>();
+        sp=getSharedPreferences("taskMaster",0);
+        String idUser = sp.getString("idUserList",null);
+        if(idUser != null) {
+            String[] parts0 = idUser.split("/");
+            for (String part : parts0) {
+                idUserList.add(part);
+            }
+            firebasecController.readShereTask(this, idUserList);
+        }
 
         ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
         fraindsList = new ArrayList<ItemTask>();
@@ -78,6 +88,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         for (String part : parts) {
             ArrayCategory.add(part);
         }
+
 
 
 
@@ -109,13 +120,21 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         }
         else if(v==btnSerchDialog){
             CreatSearchTaskDialod();
-        } else if (v == btnSearchTask) {
+        }
+        else if (v == btnSearchTask) {
           String id = etSearchTask.getText().toString();
             String[] parts = id.split("/");
             String idUser = parts[0];
             String idTask = parts[1];
             firebasecController.saveShereTask(idUser,idTask);
             d.dismiss();
+
+            SharedPreferences.Editor editor=sp.edit();
+            String str= sp.getString("taskMaster",null);
+            editor.putString("idUserList",str + "/" + idUser);
+            editor.commit();
+            friandsAdapter.notifyDataSetChanged(); // ריענון אדפטר
+
         }
 
     }
@@ -170,8 +189,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
     }
     @Override
     public void callbackShereTask(ArrayList<ItemTask> taskList) {
-        friandsAdapter=new FriandsAdapter(this,0,0,taskList);
-        lv.setAdapter(friandsAdapter);
+
     }
 
 
@@ -179,7 +197,13 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void callbackUser(String user) {}
     @Override
-    public void callbackTask(ArrayList<ItemTask> taskList) {}
+    public void callbackTask(ArrayList<ItemTask> taskList) {
+        if(taskList != null) {
+
+            friandsAdapter = new FriandsAdapter(this, 0, 0, taskList);
+            lv.setAdapter(friandsAdapter);
+        }
+    }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {}
     @Override

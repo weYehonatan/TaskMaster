@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -99,7 +100,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-                }
+
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                Intent intent = new Intent(this, MyReceiver.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+                // חלופה אחרת: אם לא יעבוד ב9:00
+                //PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
+
+// הגדר שעון מעורר שיפעל כל יום בשעה 9:00
+                long alarmTime = System.currentTimeMillis() + 1000 * 60 * 60 * (9 - Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+
+
+        }
         public void addCategory(String newCategory){
                 String str1 = sp.getString("category",null);
                 String str2 = newCategory +"/" ;
@@ -126,10 +141,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         firebasecController.saveTask(itemTask);
                         Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
                         d.dismiss();
-                        Intent intent = new Intent(this,aaReceiver.class);
+
+                        Intent intent = new Intent(this,MyReceiver.class);
+                        intent.putExtra("idTask",itemTask.getIdTask());
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
                         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+                        Calendar systemCalender = Calendar.getInstance();
+                        systemCalender.set(Dyear,Dmonth,Dday,19,19);
+
                         alarmManager.set(AlarmManager.RTC,System.currentTimeMillis()+4000,pendingIntent);
+                        //alarmManager.set(AlarmManager.RTC,systemCalender.getTimeInMillis(),pendingIntent);
+
                 }
                 else if (v==btnSettingToDialog) {
                         CreatSettingDialod();

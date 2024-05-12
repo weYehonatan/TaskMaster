@@ -2,6 +2,7 @@ package yehonatan.weitzman.taskmaster;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -86,11 +87,16 @@ public class FirebasecController {
     }
 
     public void saveTask(ItemTask itemTask) {
+        itemTask.setIdCreatUser(getAuth().getCurrentUser().getUid());
         getReference().child(getAuth().getCurrentUser().getUid()).child("task").push().setValue(itemTask);
     }
 
     public void deleteTask(String taskId) {
         DatabaseReference myRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
+        myRef.removeValue();
+    }
+    public void deleteShereTask(String idUser,String idTask){
+        DatabaseReference myRef = getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask);
         myRef.removeValue();
     }
 
@@ -166,29 +172,38 @@ public class FirebasecController {
         getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
     }
 
-    public void readShereTask(FirebaseCallback firebaseCallback) {
-        // כבר לא רלוונטי
-
-            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                ArrayList<ItemTask> taskArrayList = new ArrayList<>();
-
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    ItemTask task1 = data.getValue(ItemTask.class);
-                    task1.setIdTask(data.getKey());
-                    taskArrayList.add(task1);
-                }
-                firebaseCallback.callbackShereTask(taskArrayList);
-
-            }
+    public void readShereTask(FirebaseCallback firebaseCallback,ArrayList<String> idUserList) {
+        ArrayList<ItemTask> taskArrayList = new ArrayList<>();
+        for (int i = 0; i<idUserList.size();i++) {
+            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUserList.get(i)).addValueEventListener(new ValueEventListener() {
                 @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-            }
-        });
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        String keyTask = data.getValue(String.class); // get ID task
+                        Log.d("yhegge", keyTask);
+                        getReference().child(getAuth().getUid()).child("task").child(keyTask).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                ItemTask itemTask = snapshot.getValue(ItemTask.class);
+                                taskArrayList.add(itemTask);
+                                firebaseCallback.callbackTask(taskArrayList);
+                            }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+        }
     }
 
     public static boolean checkDay(ItemTask task) {
