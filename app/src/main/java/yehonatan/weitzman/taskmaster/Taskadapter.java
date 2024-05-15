@@ -1,8 +1,7 @@
         package yehonatan.weitzman.taskmaster;
 
-        import static androidx.core.content.ContextCompat.startActivity;
-        import static yehonatan.weitzman.taskmaster.FirebasecController.getAuth;
-        import android.annotation.SuppressLint;
+        import static yehonatan.weitzman.taskmaster.FirebaseController.getAuth;
+
         import android.app.Dialog;
         import android.content.Intent;
         import android.content.SharedPreferences;
@@ -23,13 +22,15 @@
         import androidx.recyclerview.widget.RecyclerView;
 
         import java.util.ArrayList;
+        import java.util.Calendar;
         import java.util.List;
         public class Taskadapter extends RecyclerView.Adapter<Taskadapter.TaskViewHolder>  {
-            FirebasecController firebasecController;
+            FirebaseController firebaseController;
                 //this context we will use to inflate the layout
                 private Context mCtx;
                 //we are storing all the products in a list
                 private List<ItemTask> productList;
+
 
 
 
@@ -39,8 +40,8 @@
                 {
                     this.mCtx = mCtx;
                     this.productList = productList;
-                    firebasecController = new FirebasecController();
-                    //firebasecController.setContext(mCtx);
+                    firebaseController = new FirebaseController();
+
 
                 }
 
@@ -73,9 +74,6 @@
 
                  holder.checkBox.setChecked(false);
 
-                if(holder.checkBox.isChecked()) {
-
-                }
 
 
                 holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -85,7 +83,7 @@
                             // קבלת הפריט הנוכחי
                             ItemTask itemTask = productList.get(position);
                             // מחיקת הפריט מ-Firebase
-                            firebasecController.deleteTask(itemTask.getIdTask());
+                            firebaseController.deleteTask(itemTask.getIdTask());
                             // מחיקת הפריט מהרשימה המקומית
                             productList.remove(position);
                             // עדכון RecyclerView
@@ -96,26 +94,24 @@
                     }
                 });
 
-
-                if(firebasecController.checkDay(product)){
+                if(checkDay(product)){
                     holder.tvLate.setBackgroundColor(Color.parseColor("#FF0000"));
-                    holder.tvLate.setText(" Late" );
+                    holder.tvLate.setText(R.string.late );
 
                 }
                 else{
                     holder.tvLate.setBackgroundColor(Color.parseColor("#008000"));
-                    holder.tvLate.setText( "check date" );
+                    holder.tvLate.setText( R.string.check_date );
                 }
 
             }
 
 
-
-
             @Override
             public int getItemCount() {
-                return productList.size();
+                return 0;
             }
+
 
 
             class TaskViewHolder extends RecyclerView.ViewHolder {
@@ -127,8 +123,6 @@
                     tvCategory = itemView.findViewById(R.id.tvCategory);
                     tvLate = itemView.findViewById(R.id.tvLate);
                     checkBox = itemView.findViewById(R.id.checkBox_IsFinish);
-                    //checkBox.setOnCheckedChangeListener(mCtx);
-
                 }
 
 
@@ -212,7 +206,7 @@
                         item.setDescription(etDescription.getText().toString());
                         // לעדכן את RecyclerView
                         notifyItemChanged(productList.indexOf(item));
-                        firebasecController.updateTask(item.getIdTask(),item,mCtx);
+                        firebaseController.updateTask(item.getIdTask(),item,mCtx);
                         d.dismiss();
                         // !!!!!!!!!!!!!!!לזכור לבצע עדכון לתאריך!!!!!!!!!!
 
@@ -231,12 +225,41 @@
 
 
 
+            public static boolean checkDay(ItemTask task) {
+                int year = task.getYearDate();
+                int month = task.getMonthDate();
+                int day = task.getDayDate();
 
+                Calendar systemCalender = Calendar.getInstance();
+                DateItem currentDate = new DateItem(systemCalender.get(Calendar.YEAR),systemCalender.get(Calendar.MONTH)+1,systemCalender.get(Calendar.DAY_OF_MONTH));
+                DateItem taskDate = new DateItem(year,month,day);
+                // היה דילי של חודש בדיוק בcurrentDate לכן עשיתי "+1"
 
-
-
-
-
+                if(currentDate.getYear() > taskDate.getYear()){
+                    return true;
+                }
+                else if (currentDate.getYear() < taskDate.getYear()) {
+                    return false;
+                }
+                else {
+                    if (currentDate.getMonth() > taskDate.getMonth()){
+                        return true;
+                    }
+                    else if (currentDate.getMonth() < taskDate.getMonth()) {
+                        return false;
+                    }
+                    else {
+                        if (currentDate.getDay() > taskDate.getDay()){
+                            return true;
+                        }
+                        else if (currentDate.getDay() < taskDate.getDay()) {
+                            // בגדול לא צריך את זה
+                            return false;
+                        }
+                    }
+                }
+                return false;
+            }
 
 
 

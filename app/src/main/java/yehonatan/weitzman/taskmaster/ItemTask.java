@@ -5,8 +5,6 @@ import java.util.ArrayList;
 public class ItemTask {
     private String name;
     private String description;
-   // private boolean finish;
-    private boolean late;
     private String category;
     private String idTask;
     private int dayDate;
@@ -20,8 +18,6 @@ public class ItemTask {
     public ItemTask(String name,String description, String category, int dayDate, int monthDate, int yearDate) {
         this.name = name;
         this.description = description;
-       // this.finish = false;
-        this.late = false;
         this.category = category;
         this.dayDate = dayDate;
         this.monthDate = monthDate;
@@ -34,8 +30,6 @@ public class ItemTask {
 
     public ItemTask(String name, boolean finish, boolean late, String category, int dayDate, int monthDate, int yearDate) {
         this.name = name;
-     //   this.finish = finish;
-        this.late = late;
         this.category = category;
         this.dayDate = dayDate;
         this.monthDate = monthDate;
@@ -65,13 +59,7 @@ public class ItemTask {
     public void setIdCreatUser(String idCreatUser) {
         this.idCreatUser = idCreatUser;
     }
-    //    public boolean isFinish() {
-//        return finish;
-//    }
 
-//    public void setFinish(boolean finish) {
-//        this.finish = finish;
-//    }
 
     public String getCategory() {
         return category;
@@ -113,12 +101,6 @@ public class ItemTask {
         this.yearDate = yearDate;
     }
 
-    public boolean isLate() {
-        return late;
-    }
 
-    public void setLate(boolean late) {
-        this.late = late;
-    }
 }
 

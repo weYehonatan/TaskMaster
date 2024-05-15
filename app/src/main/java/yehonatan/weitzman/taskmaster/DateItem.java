@@ -2,7 +2,6 @@ package yehonatan.weitzman.taskmaster;
 
 public class DateItem {
     //   מטרת העצם היא לשימוש התאריכי יעד של המשימות
-
     private int year;
     private int month;
     private int day;

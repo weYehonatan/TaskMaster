@@ -1,6 +1,6 @@
 package yehonatan.weitzman.taskmaster;
 
-import static yehonatan.weitzman.taskmaster.FirebasecController.getAuth;
+import static yehonatan.weitzman.taskmaster.FirebaseController.getAuth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,9 +28,8 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<String> idUserList;
     FriandsAdapter friandsAdapter;
     TextView tvMyName, tvMyID,tvShowID;
-    User user;
-    FirebasecController firebasecController;
-    Button btnNewShereTask,btnDate_shereTask,btnSaveNewTask_Dialog_shereTask,btnSerchDialog,btnCloseDialog,btnSearchTask;
+    FirebaseController firebaseController;
+    Button btnNewShereTask,btnDate_shereTask,btnSerchDialog,btnCloseDialog,btnSearchTask;
     Dialog d;
     EditText etNewTask_Dialog_shereTask,etSearchTask;
     Spinner spinner_shereTask;
@@ -56,7 +55,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         btnSerchDialog = findViewById(R.id.btnSerchDialog);
         btnSerchDialog.setOnClickListener(this);
 
-        firebasecController = new FirebasecController(this);
+        firebaseController = new FirebaseController(this);
 
         idUserList = new ArrayList<String>();
         sp=getSharedPreferences("taskMaster",0);
@@ -66,7 +65,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             for (String part : parts0) {
                 idUserList.add(part);
             }
-            firebasecController.readShereTask(this, idUserList);
+            firebaseController.readShereTask(this, idUserList);
         }
 
         ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
@@ -105,12 +104,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             int day = systemCalender.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,new FriandsActivity.SetDate(),year,month,day);
             datePickerDialog.show();
-        } else if (v== btnSaveNewTask_Dialog_shereTask) {
-            ItemTask itemTask = new ItemTask(etNewTask_Dialog_shereTask.getText().toString(),null,SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
-            String idTask = firebasecController.creatShereTask(itemTask);
-            Toast.makeText(this,"The task has been added! Don't forget to copy and share the task:)",Toast.LENGTH_LONG).show();
-            tvShowID.setText(getAuth().getCurrentUser().getUid() + "/" + idTask);
-        } else if (v == btnCloseDialog) {
+        }  else if (v == btnCloseDialog) {
             d.dismiss();
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_TEXT,tvShowID.getText().toString());
@@ -126,7 +120,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             String[] parts = id.split("/");
             String idUser = parts[0];
             String idTask = parts[1];
-            firebasecController.saveShereTask(idUser,idTask);
+            firebaseController.saveShereTask(idUser,idTask);
             d.dismiss();
 
             SharedPreferences.Editor editor=sp.edit();
@@ -148,8 +142,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         etNewTask_Dialog_shereTask = (EditText) d.findViewById(R.id.tvEditTask);
         btnDate_shereTask = (Button) d.findViewById(R.id.btnEditDate);
         btnDate_shereTask.setOnClickListener(this);
-        btnSaveNewTask_Dialog_shereTask = (Button) d.findViewById(R.id.btnSaveEditTask);
-        btnSaveNewTask_Dialog_shereTask.setOnClickListener(this);
+
         tvShowID = d.findViewById(R.id.tvShowID);
         btnCloseDialog = d.findViewById(R.id.btnCloseDialog);
         btnCloseDialog.setOnClickListener(this);
@@ -187,10 +180,6 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             Dday =dayOfMonth;
         }
     }
-    @Override
-    public void callbackShereTask(ArrayList<ItemTask> taskList) {
-
-    }
 
 
 
@@ -204,10 +193,7 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             lv.setAdapter(friandsAdapter);
         }
     }
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {}
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {}
+
 
 
 

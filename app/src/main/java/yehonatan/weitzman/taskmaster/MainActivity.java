@@ -31,7 +31,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
-        TextView tvName;
+        private TextView tvName;
         List<ItemTask> productList;
         ArrayList<String> ArrayCategory;
         RecyclerView recyclerView;
@@ -39,12 +39,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageButton btnNewTaskToDialog,btnSettingToDialog;
         EditText etNewTask,etAddCategory,etDescription ;
         Button btnSaveTask,btnDate,btnSaveCategory;
-        FirebasecController firebasecController;
+        FirebaseController firebaseController;
         User user;
         ItemTask itemTask;
         Spinner spinner;
         SharedPreferences sp;
-
         int Dday,Dmonth,Dyear;
 
 
@@ -63,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 //             ~~~~ firebasecController ~~~~
-                firebasecController = new FirebasecController(this);
-                firebasecController.readTask(this);
-                firebasecController.readUser(this);
+                firebaseController = new FirebaseController(this);
+                firebaseController.readTask(this);
+                firebaseController.readUser(this);
                // firebasecController.readShereTask(this);
                 user = new User();
 
@@ -102,15 +101,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                Intent intent = new Intent(this, MyReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-                // חלופה אחרת: אם לא יעבוד ב9:00
-                //PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
+//                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//                Intent intent = new Intent(this, MyReceiver.class);
+//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+//                // חלופה אחרת: אם לא יעבוד ב9:00
+//                //PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
+//                // הגדר שעון מעורר שיפעל כל יום בשעה 9:00
+//                long alarmTime = System.currentTimeMillis() + 1000 * 60 * 60 * (9 - Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime, AlarmManager.INTERVAL_DAY, pendingIntent);
 
-// הגדר שעון מעורר שיפעל כל יום בשעה 9:00
-                long alarmTime = System.currentTimeMillis() + 1000 * 60 * 60 * (9 - Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+                // הגדרת ההתראה לשעה 9:00
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, 9);
+                calendar.set(Calendar.MINUTE, 00);
+                calendar.set(Calendar.SECOND, 0);
+                // בדיקה אם השעה כבר עברה היום
+                if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                        calendar.add(Calendar.DAY_OF_YEAR, 1); // הוסף יום אם השעה כבר עברה
+                }
+                // יצירת Intent ל-BroadcastReceiver
+                Intent intent = new Intent(this, MyReceiver.class);
+                intent.putExtra("MyReceiver","Good Morning");
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                // הגדרת AlarmManager
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                if (alarmManager != null) {
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                }
 
 
 
@@ -134,24 +152,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 {
                         CreatNewTaskDialod();
                 }
-                else if ( v == btnSaveTask)
+                if ( v == btnSaveTask)
                 {
                         //saveTask to Firebase :
                         itemTask = new ItemTask(etNewTask.getText().toString(),etDescription.getText().toString(),SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
-                        firebasecController.saveTask(itemTask);
+                        firebaseController.saveTask(itemTask);
                         Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
                         d.dismiss();
 
                         Intent intent = new Intent(this,MyReceiver.class);
                         intent.putExtra("idTask",itemTask.getIdTask());
+                        intent.putExtra("MyReceiver","New Task");
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
                         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-                        Calendar systemCalender = Calendar.getInstance();
-                        systemCalender.set(Dyear,Dmonth,Dday,19,19);
-
                         alarmManager.set(AlarmManager.RTC,System.currentTimeMillis()+4000,pendingIntent);
-                        //alarmManager.set(AlarmManager.RTC,systemCalender.getTimeInMillis(),pendingIntent);
 
                 }
                 else if (v==btnSettingToDialog) {
@@ -227,10 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 recyclerView.setAdapter(adapter);
         }
 
-        @Override
-        public void callbackShereTask(ArrayList<ItemTask> taskList) {
 
-        }
 
 
         public  class SetDate implements DatePickerDialog.OnDateSetListener
@@ -269,28 +280,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         CreatSettingDialod();
                 } else if (id == R.id.action_SignOut) {
 //                        firebasecController.LogOut();
-                        Intent intent=new Intent(this,OpeningActivity.class);
+                        Intent intent=new Intent(this,SignInActivity.class);
                         this.startActivity(intent);
                 }
                 if(id == R.id.action_SignOut){
-                        firebasecController.LogOut();
+                        firebaseController.LogOut();
                 }
                 return true;
         }
 
 
-
-
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
 
 
 

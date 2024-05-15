@@ -19,9 +19,6 @@ public class SpinnerControler {
         private static String selected;
 
 
-
-
-
         public SpinnerControler(Context context, Spinner spinner, ArrayList<String> items) {
             this.spinner = spinner;
             this.items = items;
@@ -46,9 +43,6 @@ public class SpinnerControler {
         return selected;
     }
 
-    public void setSelected(String selected) {
-        this.selected = selected;
-    }
 
 
 }

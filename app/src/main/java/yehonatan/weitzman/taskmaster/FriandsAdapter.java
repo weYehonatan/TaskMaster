@@ -1,6 +1,5 @@
 package yehonatan.weitzman.taskmaster;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +16,7 @@ import java.util.List;
 
 public class FriandsAdapter extends ArrayAdapter<ItemTask> {
 
-    FirebasecController firebasecController;
+    FirebaseController firebaseController;
     Context context;
     List<ItemTask> objects;
     public FriandsAdapter(Context context, int resource, int textViewResourceId, List<ItemTask> objects) {
@@ -26,7 +24,7 @@ public class FriandsAdapter extends ArrayAdapter<ItemTask> {
 
         this.context=context;
         this.objects=objects;
-        firebasecController = new FirebasecController();
+        firebaseController = new FirebaseController();
 
     }
 
@@ -57,7 +55,7 @@ public class FriandsAdapter extends ArrayAdapter<ItemTask> {
                     ItemTask itemTask = objects.get(position);
 
                     // מחיקת הפריט מ-Firebase
-                    firebasecController.deleteShereTask(itemTask.getIdCreatUser(),itemTask.getIdTask());
+                    firebaseController.deleteShereTask(itemTask.getIdCreatUser(),itemTask.getIdTask());
 
                     // מחיקת הפריט מהרשימה המקומית
                     objects.remove(position);

@@ -44,4 +44,6 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="late">" Late"</string>
+    <string name="check_date">"check date"</string>
 </resources>

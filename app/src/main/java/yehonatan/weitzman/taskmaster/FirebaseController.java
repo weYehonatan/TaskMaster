@@ -19,16 +19,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
-public class FirebasecController {
+public class FirebaseController {
     private static FirebaseAuth mAuth;
     private Context context;
     private static FirebaseDatabase DATABASE;
     private static DatabaseReference REFERENCE;
 
-    public FirebasecController() {
+    public FirebaseController() {
 
+    }
+    public FirebaseController(Context context) {
+        this.context = context;
     }
 
 
@@ -43,12 +45,8 @@ public class FirebasecController {
         return REFERENCE;
     }
 
-    public FirebasecController(Context context) {
-        this.context = context;
-    }
 
     public static FirebaseAuth getAuth() {
-        //       if(mAuth == null)
         mAuth = FirebaseAuth.getInstance();
         return mAuth;
     }
@@ -56,15 +54,14 @@ public class FirebasecController {
 
     // user connect?
     public boolean currentUser() {
-        FirebaseUser isFbUser = getAuth().getCurrentUser();
-        if (isFbUser != null)
+        if (getAuth().getCurrentUser() != null)
             return true;
         return false;
     }
 
     public void LogOut() {
         getAuth().signOut();
-        context.startActivity(new Intent(context, OpeningActivity.class));
+        context.startActivity(new Intent(context, SignInActivity.class));
     }
 
     public void creatUser(String email, String password, String userName) {
@@ -79,7 +76,6 @@ public class FirebasecController {
                             Intent intent = new Intent(context, MainActivity.class);
                             context.startActivity(intent);
                         } else {
-                            ;
                             Toast.makeText(context, "" + task.getException(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -96,8 +92,7 @@ public class FirebasecController {
         myRef.removeValue();
     }
     public void deleteShereTask(String idUser,String idTask){
-        DatabaseReference myRef = getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask);
-        myRef.removeValue();
+        getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask).removeValue();
     }
 
 
@@ -157,17 +152,6 @@ public class FirebasecController {
 
     }
 
-
-    public String creatShereTask(ItemTask itemTask) {
-        // כבר לא רלוונטי
-        // save the sher task + return the idTask
-       String idTask = getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").push().getKey();
-       getReference().child(getAuth().getCurrentUser().getUid()).child("myShereTask").child(idTask).setValue(itemTask);
-
-        return idTask;
-    }
-
-
     public void saveShereTask(String creatorID, String itemTaskID) {
         getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
     }
@@ -175,19 +159,24 @@ public class FirebasecController {
     public void readShereTask(FirebaseCallback firebaseCallback,ArrayList<String> idUserList) {
         ArrayList<ItemTask> taskArrayList = new ArrayList<>();
         for (int i = 0; i<idUserList.size();i++) {
+            String userId = idUserList.get(i);
             getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUserList.get(i)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                     for (DataSnapshot data : snapshot.getChildren()) {
                         String keyTask = data.getValue(String.class); // get ID task
-                        Log.d("yhegge", keyTask);
                         getReference().child(getAuth().getUid()).child("task").child(keyTask).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                ItemTask itemTask = snapshot.getValue(ItemTask.class);
-                                taskArrayList.add(itemTask);
-                                firebaseCallback.callbackTask(taskArrayList);
+                                if (snapshot.exists()) {
+                                    ItemTask itemTask = snapshot.getValue(ItemTask.class);
+                                    taskArrayList.add(itemTask);
+                                    firebaseCallback.callbackTask(taskArrayList);
+                                }
+                                else {
+                                    deleteShereTask(userId,keyTask);
+                                }
                             }
 
                             @Override
@@ -206,41 +195,6 @@ public class FirebasecController {
         }
     }
 
-    public static boolean checkDay(ItemTask task) {
-        int year = task.getYearDate();
-        int month = task.getMonthDate();
-        int day = task.getDayDate();
-
-        Calendar systemCalender = Calendar.getInstance();
-        DateItem currentDate = new DateItem(systemCalender.get(Calendar.YEAR),systemCalender.get(Calendar.MONTH)+1,systemCalender.get(Calendar.DAY_OF_MONTH));
-        DateItem taskDate = new DateItem(year,month,day);
-        // היה דילי של חודש בדיוק בcurrentDate לכן עשיתי "+1" (שורה 197)
-
-        if(currentDate.getYear() > taskDate.getYear()){
-         return true;
-        }
-        else if (currentDate.getYear() < taskDate.getYear()) {
-            return false;
-        }
-        else {
-            if (currentDate.getMonth() > taskDate.getMonth()){
-                return true;
-            }
-            else if (currentDate.getMonth() < taskDate.getMonth()) {
-                return false;
-            }
-            else {
-                if (currentDate.getDay() > taskDate.getDay()){
-                    return true;
-                }
-                else if (currentDate.getDay() < taskDate.getDay()) {
-                    // בגדול לא צריך את זה
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
 
 
     public void updateTask(String taskId, ItemTask updatedTask,Context mCtx ) {

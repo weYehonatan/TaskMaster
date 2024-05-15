@@ -3,21 +3,17 @@ package yehonatan.weitzman.taskmaster;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnSignUp;
+    Button btnSignUp,btnToSignIn;
     EditText etUserEmail,etPassword,etUserName;
-    FirebasecController firebasecController;
+    FirebaseController firebaseController;
 
 
 
@@ -29,12 +25,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         btnSignUp = (Button)findViewById(R.id.btnSignUp);
         btnSignUp.setOnClickListener(this);
 
+        btnToSignIn = findViewById(R.id.btnToSignIn);
+        btnToSignIn.setOnClickListener(this);
+
+
         etUserEmail = (EditText)findViewById(R.id.etEmail);
         etPassword = (EditText)findViewById(R.id.etPassword);
         etUserName = findViewById(R.id.etUserName);
 
 
-        firebasecController = new FirebasecController(this);
+        firebaseController = new FirebaseController(this);
 
 
     }
@@ -46,11 +46,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         if(btnSignUp == v && etUserName != null)
         {
-           firebasecController.creatUser(etUserEmail.getText().toString(),etPassword.getText().toString(),etUserName.getText().toString());
+           firebaseController.creatUser(etUserEmail.getText().toString(),etPassword.getText().toString(),etUserName.getText().toString());
             Toast.makeText(this,"wellcome!",Toast.LENGTH_LONG).show();
         }
         else if( etUserName == null){
             Toast.makeText(this,"eror, need a userName",Toast.LENGTH_LONG).show();
+        } else if (v == btnToSignIn) {
+            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+            startActivity(intent);
         }
 
 
