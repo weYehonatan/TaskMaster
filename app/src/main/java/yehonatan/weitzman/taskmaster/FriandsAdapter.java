@@ -70,7 +70,7 @@ public class FriandsAdapter extends ArrayAdapter<ItemTask> {
         });
 
 
-        if(temp.isLate()){
+        if(firebaseController.checkDay(temp)){
             Late.setBackgroundColor(Color.parseColor("#FF0000"));
             Late.setText(" Late" );
         }

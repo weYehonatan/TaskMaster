@@ -28,7 +28,7 @@ public class ItemTask {
         this.idTask = idTask;
     }
 
-    public ItemTask(String name, boolean finish, boolean late, String category, int dayDate, int monthDate, int yearDate) {
+    public ItemTask(String name, String category, int dayDate, int monthDate, int yearDate) {
         this.name = name;
         this.category = category;
         this.dayDate = dayDate;

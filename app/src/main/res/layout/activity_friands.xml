@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FriandsActivity">
+    tools:context=".FriandsActivity"
+    android:orientation="vertical"
+    android:background="@drawable/login_background">
 
 
     <Button
@@ -83,15 +85,16 @@
 
     <ListView
         android:id="@+id/lv"
-        android:layout_width="408dp"
-        android:layout_height="551dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="477dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintVertical_bias="0.444"
+        tools:layout_editor_absoluteX="-16dp" />
 
     <Button
         android:id="@+id/btnNewShereTask"

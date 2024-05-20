@@ -45,66 +45,24 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friands);
-
-        tvMyName = findViewById(R.id.tvMyName);
-        tvMyID = findViewById(R.id.tvMyID);
-        tvMyID.setText("Your ID: " + getAuth().getCurrentUser().getUid());
-
-        btnNewShereTask = findViewById(R.id.btnNewShereTask);
-        btnNewShereTask.setOnClickListener(this);
-        btnSerchDialog = findViewById(R.id.btnSerchDialog);
-        btnSerchDialog.setOnClickListener(this);
-
         firebaseController = new FirebaseController(this);
 
-        idUserList = new ArrayList<String>();
-        sp=getSharedPreferences("taskMaster",0);
-        String idUser = sp.getString("idUserList",null);
-        if(idUser != null) {
-            String[] parts0 = idUser.split("/");
-            for (String part : parts0) {
-                idUserList.add(part);
-            }
-            firebaseController.readShereTask(this, idUserList);
-        }
-
-        ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
-        fraindsList = new ArrayList<ItemTask>();
-        fraindsList.add(t1);
-
-        // - create adapter
-        friandsAdapter=new FriandsAdapter(this,0,0,fraindsList);
-        //phase 4 reference to listview
-        lv=(ListView)findViewById(R.id.lv);
-        //lv.setAdapter(friandsAdapter);
-
-
-//         spiner:
-        ArrayCategory = new ArrayList<String>();
-        Intent intent=getIntent();
-        String shereCategory = intent.getExtras().getString("shereCategory");
-        String[] parts = shereCategory.split("/");
-        for (String part : parts) {
-            ArrayCategory.add(part);
-        }
-
-
-
-
+        initializationView();
+        readShereTask();
     }
+
 
     @Override
     public void onClick(View v) {
-        if (v == btnNewShereTask){
-            CreatNewTaskDialod();
-        } else if (v == btnDate_shereTask) {
+        if (v == btnDate_shereTask) {
             Calendar systemCalender = Calendar.getInstance();
             int year = systemCalender.get(Calendar.YEAR);
             int month = systemCalender.get(Calendar.MONTH);
             int day = systemCalender.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,new FriandsActivity.SetDate(),year,month,day);
             datePickerDialog.show();
-        }  else if (v == btnCloseDialog) {
+        }
+        if (v == btnCloseDialog) {
             d.dismiss();
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_TEXT,tvShowID.getText().toString());
@@ -112,11 +70,11 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
             intent.setPackage("com.whatsapp");
             startActivity(intent);
         }
-        else if(v==btnSerchDialog){
+        if(v==btnSerchDialog){
             CreatSearchTaskDialod();
         }
-        else if (v == btnSearchTask) {
-          String id = etSearchTask.getText().toString();
+        if (v == btnSearchTask) {
+            String id = etSearchTask.getText().toString();
             String[] parts = id.split("/");
             String idUser = parts[0];
             String idTask = parts[1];
@@ -133,28 +91,41 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-
-    private void CreatNewTaskDialod() {
-        d = new Dialog(this);
-        d.setContentView(R.layout.dialog_shere_task);
-        d.setTitle("Shere TASK");
-        d.setCancelable(true);
-        etNewTask_Dialog_shereTask = (EditText) d.findViewById(R.id.tvEditTask);
-        btnDate_shereTask = (Button) d.findViewById(R.id.btnEditDate);
-        btnDate_shereTask.setOnClickListener(this);
-
-        tvShowID = d.findViewById(R.id.tvShowID);
-        btnCloseDialog = d.findViewById(R.id.btnCloseDialog);
-        btnCloseDialog.setOnClickListener(this);
-
-
-
-               //  ~~~~~ spinner ~~~~~
-        spinner_shereTask = (Spinner) d.findViewById(R.id.spinnerEdit);
-        new SpinnerControler(this, spinner_shereTask, ArrayCategory);
-        d.show();
-
+    private void readShereTask() {
+        idUserList = new ArrayList<String>();
+        sp=getSharedPreferences("taskMaster",0);
+        String idUser = sp.getString("idUserList",null);
+        if(idUser != null) {
+            String[] parts0 = idUser.split("/");
+            for (String part : parts0) {
+                idUserList.add(part);
+            }
+            firebaseController.readShereTask(this, idUserList);
+        }
+        ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
+        fraindsList = new ArrayList<ItemTask>();
+        fraindsList.add(t1);
+        // - create adapter
+        friandsAdapter=new FriandsAdapter(this,0,0,fraindsList);
+        //phase 4 reference to listview
+        lv=(ListView)findViewById(R.id.lv);
     }
+
+    private void initializationView() {
+        tvMyName = findViewById(R.id.tvMyName);
+        tvMyID = findViewById(R.id.tvMyID);
+        tvMyID.setText("Your ID: " + getAuth().getCurrentUser().getUid());
+
+        btnNewShereTask = findViewById(R.id.btnNewShereTask);
+        btnNewShereTask.setOnClickListener(this);
+        btnSerchDialog = findViewById(R.id.btnSerchDialog);
+        btnSerchDialog.setOnClickListener(this);
+    }
+
+
+
+
+
     private void CreatSearchTaskDialod() {
         d = new Dialog(this);
         d.setContentView(R.layout.dialog_search_task);

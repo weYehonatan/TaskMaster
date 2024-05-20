@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class FirebaseController {
     private static FirebaseAuth mAuth;
@@ -63,6 +64,27 @@ public class FirebaseController {
         getAuth().signOut();
         context.startActivity(new Intent(context, SignInActivity.class));
     }
+    public void changeUserName(String newUserName){
+        if (newUserName != null) {
+            if (currentUser()) {
+                getReference().child(getAuth().getCurrentUser().getUid()).child("name").setValue(newUserName)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(context, "שם המשתמש עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, "שגיאה בעדכון שם המשתמש", Toast.LENGTH_SHORT).show();
+                                    Log.e("Firebase", "Error updating user name", task.getException());
+                                }
+                            }
+                        });
+            } else {
+                Toast.makeText(context, "משתמש אינו מחובר", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     public void creatUser(String email, String password, String userName) {
         getAuth().createUserWithEmailAndPassword(email, password)
@@ -92,7 +114,7 @@ public class FirebaseController {
         myRef.removeValue();
     }
     public void deleteShereTask(String idUser,String idTask){
-        getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask).removeValue();
+            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask).removeValue();
     }
 
 
@@ -171,6 +193,7 @@ public class FirebaseController {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     ItemTask itemTask = snapshot.getValue(ItemTask.class);
+                                    itemTask.setIdTask(keyTask);
                                     taskArrayList.add(itemTask);
                                     firebaseCallback.callbackTask(taskArrayList);
                                 }
@@ -211,6 +234,42 @@ public class FirebaseController {
                         }
                     }
                 });
+    }
+
+    public static boolean checkDay(ItemTask task) {
+        int year = task.getYearDate();
+        int month = task.getMonthDate();
+        int day = task.getDayDate();
+
+        Calendar systemCalender = Calendar.getInstance();
+        DateItem currentDate = new DateItem(systemCalender.get(Calendar.YEAR),systemCalender.get(Calendar.MONTH)+1,systemCalender.get(Calendar.DAY_OF_MONTH));
+        DateItem taskDate = new DateItem(year,month,day);
+        // יש דילי של חודש בדיוק בcurrentDate לכן עשיתי "+1"
+
+        if(currentDate.getYear() > taskDate.getYear()){
+            return true;
+        }
+        else if (currentDate.getYear() < taskDate.getYear()) {
+            return false;
+        }
+        else {
+            if (currentDate.getMonth() > taskDate.getMonth()){
+                return true;
+            }
+            else if (currentDate.getMonth() < taskDate.getMonth()) {
+                return false;
+            }
+            else {
+                if (currentDate.getDay() > taskDate.getDay()){
+                    return true;
+                }
+                else if (currentDate.getDay() < taskDate.getDay()) {
+                    // בגדול לא צריך את זה
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
 

@@ -2,6 +2,7 @@
 
         import static yehonatan.weitzman.taskmaster.FirebaseController.getAuth;
 
+        import android.app.DatePickerDialog;
         import android.app.Dialog;
         import android.content.Intent;
         import android.content.SharedPreferences;
@@ -12,6 +13,7 @@
         import android.widget.Button;
         import android.widget.CheckBox;
         import android.widget.CompoundButton;
+        import android.widget.DatePicker;
         import android.widget.EditText;
         import android.widget.ImageButton;
         import android.widget.Spinner;
@@ -25,14 +27,12 @@
         import java.util.Calendar;
         import java.util.List;
         public class Taskadapter extends RecyclerView.Adapter<Taskadapter.TaskViewHolder>  {
-            FirebaseController firebaseController;
+                FirebaseController firebaseController;
                 //this context we will use to inflate the layout
-                private Context mCtx;
+                static Context mCtx;
                 //we are storing all the products in a list
                 private List<ItemTask> productList;
-
-
-
+                int Dday,Dmonth,Dyear;
 
 
             //getting the context and product list with constructor
@@ -41,8 +41,6 @@
                     this.mCtx = mCtx;
                     this.productList = productList;
                     firebaseController = new FirebaseController();
-
-
                 }
 
 
@@ -94,7 +92,7 @@
                     }
                 });
 
-                if(checkDay(product)){
+                if(firebaseController.checkDay(product)){
                     holder.tvLate.setBackgroundColor(Color.parseColor("#FF0000"));
                     holder.tvLate.setText(R.string.late );
 
@@ -109,7 +107,7 @@
 
             @Override
             public int getItemCount() {
-                return 0;
+                return productList.size();
             }
 
 
@@ -177,6 +175,7 @@
                 Spinner spinnerCategory = d.findViewById(R.id.spinnerEdit);
                 Button btnSave = d.findViewById(R.id.btnSaveEditTask);
                 Button btnCancel = d.findViewById(R.id.btnCancelTask);
+                Button btnDate = d.findViewById(R.id.btnEditDate);
 
                 etTitelTask.setText(item.getName());
                 etDescription.setText(item.getDescription());
@@ -197,22 +196,33 @@
                 }
                 new SpinnerControler(mCtx, spinnerCategory, ArrayCategory);
 
+
                 btnSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // עדכון הנתונים של הפריט ברשימת הפריטים
-                        item.setName(etTitelTask.getText().toString());
-                        item.setCategory(SpinnerControler.getSelected());
-                        item.setDescription(etDescription.getText().toString());
-                        // לעדכן את RecyclerView
-                        notifyItemChanged(productList.indexOf(item));
-                        firebaseController.updateTask(item.getIdTask(),item,mCtx);
-                        d.dismiss();
-                        // !!!!!!!!!!!!!!!לזכור לבצע עדכון לתאריך!!!!!!!!!!
+                            // עדכון הנתונים של הפריט ברשימת הפריטים
+                            item.setName(etTitelTask.getText().toString());
+                            item.setCategory(SpinnerControler.getSelected());
+                            item.setDescription(etDescription.getText().toString());
+                            item.setYearDate(Dyear);
+                            item.setMonthDate(Dmonth);
+                            item.setDayDate(Dday);
+                            // לעדכן את RecyclerView
+                            notifyItemChanged(productList.indexOf(item));
+                            firebaseController.updateTask(item.getIdTask(), item, mCtx);
+                            d.dismiss();
+                        }
 
-                    }
 
                 });
+
+                btnDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        creatDateD();
+                    }
+                });
+
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -222,47 +232,28 @@
                 d.show();
             }//dialog
 
-
-
-
-            public static boolean checkDay(ItemTask task) {
-                int year = task.getYearDate();
-                int month = task.getMonthDate();
-                int day = task.getDayDate();
-
+            private void creatDateD() {
                 Calendar systemCalender = Calendar.getInstance();
-                DateItem currentDate = new DateItem(systemCalender.get(Calendar.YEAR),systemCalender.get(Calendar.MONTH)+1,systemCalender.get(Calendar.DAY_OF_MONTH));
-                DateItem taskDate = new DateItem(year,month,day);
-                // היה דילי של חודש בדיוק בcurrentDate לכן עשיתי "+1"
-
-                if(currentDate.getYear() > taskDate.getYear()){
-                    return true;
-                }
-                else if (currentDate.getYear() < taskDate.getYear()) {
-                    return false;
-                }
-                else {
-                    if (currentDate.getMonth() > taskDate.getMonth()){
-                        return true;
-                    }
-                    else if (currentDate.getMonth() < taskDate.getMonth()) {
-                        return false;
-                    }
-                    else {
-                        if (currentDate.getDay() > taskDate.getDay()){
-                            return true;
-                        }
-                        else if (currentDate.getDay() < taskDate.getDay()) {
-                            // בגדול לא צריך את זה
-                            return false;
-                        }
-                    }
-                }
-                return false;
+                int year = systemCalender.get(Calendar.YEAR);
+                int month = systemCalender.get(Calendar.MONTH);
+                int day = systemCalender.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(mCtx, new SetDate2(),year,month,day);
+                datePickerDialog.show();
             }
 
 
 
+        public class SetDate2 implements DatePickerDialog.OnDateSetListener
+        {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                monthOfYear = monthOfYear +1;
+                Toast.makeText(Taskadapter.mCtx,"You selected :" + dayOfMonth + "/" + monthOfYear +"/" + year,Toast.LENGTH_LONG).show();
+                 Dyear = year;
+                 Dmonth = monthOfYear;
+                 Dday =dayOfMonth;
+            }
+        }
 
 
-            }// class
+        }// class

@@ -32,21 +32,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etPassword = (EditText) findViewById(R.id.etPassword);
-        btnSignIn = (Button) findViewById(R.id.btnSignIn);
-        btnSignIn.setOnClickListener(this);
-
-        btnToSignUp = findViewById(R.id.btnToSignUp);
-        btnToSignUp.setOnClickListener(this);
-
         firebasecontroller = new FirebaseController(this);
-        sp=getSharedPreferences("details1",0);
-
-
-
-
+        initializationView();
     }
 
     @Override
@@ -61,4 +48,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         }
     }
+
+    private void initializationView() {
+        etEmail = (EditText) findViewById(R.id.etEmail);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        btnSignIn = (Button) findViewById(R.id.btnSignIn);
+        btnSignIn.setOnClickListener(this);
+        btnToSignUp = findViewById(R.id.btnToSignUp);
+        btnToSignUp.setOnClickListener(this);
+        sp=getSharedPreferences("details1",0);
+    }
+
+
 }

@@ -21,32 +21,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
-        btnSignUp = (Button)findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(this);
-
-        btnToSignIn = findViewById(R.id.btnToSignIn);
-        btnToSignIn.setOnClickListener(this);
-
-
-        etUserEmail = (EditText)findViewById(R.id.etEmail);
-        etPassword = (EditText)findViewById(R.id.etPassword);
-        etUserName = findViewById(R.id.etUserName);
-
-
         firebaseController = new FirebaseController(this);
-
+        initializationView();
 
     }
-
-
-
-
     @Override
     public void onClick(View v) {
         if(btnSignUp == v && etUserName != null)
         {
-           firebaseController.creatUser(etUserEmail.getText().toString(),etPassword.getText().toString(),etUserName.getText().toString());
+            firebaseController.creatUser(etUserEmail.getText().toString(),etPassword.getText().toString(),etUserName.getText().toString());
             Toast.makeText(this,"wellcome!",Toast.LENGTH_LONG).show();
         }
         else if( etUserName == null){
@@ -58,6 +41,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     }
+    private void initializationView() {
+        btnSignUp = (Button)findViewById(R.id.btnSignUp);
+        btnSignUp.setOnClickListener(this);
+        btnToSignIn = findViewById(R.id.btnToSignIn);
+        btnToSignIn.setOnClickListener(this);
+        etUserEmail = (EditText)findViewById(R.id.etEmail);
+        etPassword = (EditText)findViewById(R.id.etPassword);
+        etUserName = findViewById(R.id.etUserName);
+    }
+
+
+
 
 
 

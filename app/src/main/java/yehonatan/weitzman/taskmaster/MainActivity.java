@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -37,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView recyclerView;
         Dialog d;
         ImageButton btnNewTaskToDialog,btnSettingToDialog;
-        EditText etNewTask,etAddCategory,etDescription ;
-        Button btnSaveTask,btnDate,btnSaveCategory;
+        EditText etNewTask,etAddCategory,etDescription,etRename ;
+        Button btnSaveTask,btnDate, btnSaveSetting;
         FirebaseController firebaseController;
         User user;
         ItemTask itemTask;
@@ -47,42 +46,98 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int Dday,Dmonth,Dyear;
 
 
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_main);
 
-                tvName = findViewById(R.id.tvAppName);
-
-                //                   ~~~~ recyclerView ~~~~
-                //getting the recyclerview from xml
-                recyclerView = findViewById(R.id.recyclerView);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
                 //             ~~~~ firebasecController ~~~~
                 firebaseController = new FirebaseController(this);
                 firebaseController.readTask(this);
                 firebaseController.readUser(this);
-               // firebasecController.readShereTask(this);
+                // firebasecController.readShereTask(this);
                 user = new User();
 
+                initializationView();
+                createRecyclerView();
+                initializationCategory();
+                createNotification();
+
+
+        }
+
+        @Override
+        public void onClick(View v) {
+                if( v == btnNewTaskToDialog)
+                {
+                        CreatNewTaskDialod();
+                }
+                if ( v == btnSaveTask)
+                {
+                        //saveTask to Firebase :
+                        itemTask = new ItemTask(etNewTask.getText().toString(),etDescription.getText().toString(),
+                                SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
+                        firebaseController.saveTask(itemTask);
+                        Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
+                        d.dismiss();
+
+                        Intent intent = new Intent(this,MyReceiver.class);
+                        intent.putExtra("idTask",itemTask.getIdTask());
+                        intent.putExtra("MyReceiver","New Task");
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC,System.currentTimeMillis()+4000,pendingIntent);
+
+                }
+                if (v==btnSettingToDialog) {
+                        CreatSettingDialod();
+                }
+                if (v==btnDate) {
+                        Calendar systemCalender = Calendar.getInstance();
+                        int year = systemCalender.get(Calendar.YEAR);
+                        int month = systemCalender.get(Calendar.MONTH);
+                        int day = systemCalender.get(Calendar.DAY_OF_MONTH);
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(this,new SetDate1(),year,month,day);
+                        datePickerDialog.show();
+
+
+                }
+                if (v== btnSaveSetting){
+                        if (etRename.getText().toString() != null) {
+                                firebaseController.changeUserName(etRename.getText().toString());
+                        }
+                        if (etAddCategory.getText().toString() != null){
+                                addCategory(etAddCategory.getText().toString());
+                                Toast.makeText(this,"Category saved",Toast.LENGTH_LONG).show();
+                        }
+                        d.dismiss();
+
+                }
+
+        }
+
+
+        private void initializationView() {
+                tvName = findViewById(R.id.tvAppName);
+                // ~~~~ Dialog ~~~~
+                btnNewTaskToDialog = (ImageButton) findViewById(R.id.btnPlus);
+                btnNewTaskToDialog.setOnClickListener(this);
+        }
+
+        private void createRecyclerView() {
+                //getting the recyclerview from xml
+                recyclerView = findViewById(R.id.recyclerView);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 //initializing the productlist
                 productList = new ArrayList<>();
                 ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
                 //phase 2 - add to array list
                 productList = new ArrayList<ItemTask>();
                 productList.add(t1);
-
-
-                // ~~~~ Dialog ~~~~
-                btnNewTaskToDialog = (ImageButton) findViewById(R.id.btnPlus);
-                btnNewTaskToDialog.setOnClickListener(this);
-
-
-                // ~~~ Sharedpreference  ~~~
-
+        }
+        private void initializationCategory() {
                 ArrayCategory = new ArrayList<String>();
                 sp=getSharedPreferences("taskMaster",0);
                 SharedPreferences.Editor editor=sp.edit();
@@ -96,21 +151,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (String part : parts) {
                         ArrayCategory.add(part);
                 }
-
-
-
-
-
-//                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//                Intent intent = new Intent(this, MyReceiver.class);
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-//                // חלופה אחרת: אם לא יעבוד ב9:00
-//                //PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
-//                // הגדר שעון מעורר שיפעל כל יום בשעה 9:00
-//                long alarmTime = System.currentTimeMillis() + 1000 * 60 * 60 * (9 - Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime, AlarmManager.INTERVAL_DAY, pendingIntent);
-
-
+        }
+        private void createNotification() {
                 // הגדרת ההתראה לשעה 9:00
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, 9);
@@ -129,9 +171,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (alarmManager != null) {
                         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                 }
-
-
-
         }
         public void addCategory(String newCategory){
                 String str1 = sp.getString("category",null);
@@ -144,49 +183,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-
-
-        @Override
-        public void onClick(View v) {
-                if( v == btnNewTaskToDialog)
-                {
-                        CreatNewTaskDialod();
-                }
-                if ( v == btnSaveTask)
-                {
-                        //saveTask to Firebase :
-                        itemTask = new ItemTask(etNewTask.getText().toString(),etDescription.getText().toString(),SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
-                        firebaseController.saveTask(itemTask);
-                        Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
-                        d.dismiss();
-
-                        Intent intent = new Intent(this,MyReceiver.class);
-                        intent.putExtra("idTask",itemTask.getIdTask());
-                        intent.putExtra("MyReceiver","New Task");
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
-                        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        alarmManager.set(AlarmManager.RTC,System.currentTimeMillis()+4000,pendingIntent);
-
-                }
-                else if (v==btnSettingToDialog) {
-                        CreatSettingDialod();
-                }
-                else if (v==btnDate) {
-                        Calendar systemCalender = Calendar.getInstance();
-                        int year = systemCalender.get(Calendar.YEAR);
-                        int month = systemCalender.get(Calendar.MONTH);
-                        int day = systemCalender.get(Calendar.DAY_OF_MONTH);
-                        DatePickerDialog datePickerDialog = new DatePickerDialog(this,new SetDate(),year,month,day);
-                        datePickerDialog.show();
-                }
-                else if (v==btnSaveCategory){
-                        addCategory(etAddCategory.getText().toString());
-                        Toast.makeText(this,"Category saved",Toast.LENGTH_LONG).show();
-                        d.dismiss();
-
-                }
-
-        }
 
 
         // Dialod:
@@ -217,8 +213,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 d.setTitle("setting");
                 d.setCancelable(true);
                 etAddCategory = d.findViewById(R.id.etAddCategory);
-                btnSaveCategory = d.findViewById(R.id.btnSaveNewCategory);
-                btnSaveCategory.setOnClickListener(this);
+                etRename = d.findViewById(R.id.etRename);
+                btnSaveSetting = d.findViewById(R.id.btnSaveNewCategory);
+                btnSaveSetting.setOnClickListener(this);
 
                 d.show();
         }
@@ -244,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-        public  class SetDate implements DatePickerDialog.OnDateSetListener
+        public class SetDate1 implements DatePickerDialog.OnDateSetListener
         {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -288,7 +285,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 return true;
         }
-
 
 
 
