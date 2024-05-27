@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +33,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
         private TextView tvName;
         List<ItemTask> productList;
+        List<CategoryItemRecyclerView> categoryList;
         ArrayList<String> ArrayCategory;
-        RecyclerView recyclerView;
+        RecyclerView recyclerView,lvCategory;
+        CategoryListAdapter categoryListAdapter;
         Dialog d;
         ImageButton btnNewTaskToDialog,btnSettingToDialog;
         EditText etNewTask,etAddCategory,etDescription,etRename ;
@@ -50,11 +53,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_main);
+//                setContentView(R.layout.activity_main);
+                setContentView(R.layout.activity_test);
+
 
                 //             ~~~~ firebasecController ~~~~
                 firebaseController = new FirebaseController(this);
-                firebaseController.readTask(this);
+                //firebaseController.readTask(this);
+                firebaseController.readTasksByCategory("all",this);
                 firebaseController.readUser(this);
                 // firebasecController.readShereTask(this);
                 user = new User();
@@ -63,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 createRecyclerView();
                 initializationCategory();
                 createNotification();
-
+                createrecyclerViewCategory();
 
         }
 
@@ -100,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         int day = systemCalender.get(Calendar.DAY_OF_MONTH);
                         DatePickerDialog datePickerDialog = new DatePickerDialog(this,new SetDate1(),year,month,day);
                         datePickerDialog.show();
-
-
                 }
                 if (v== btnSaveSetting){
                         if (etRename.getText().toString() != null) {
@@ -124,19 +128,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 btnNewTaskToDialog = (ImageButton) findViewById(R.id.btnPlus);
                 btnNewTaskToDialog.setOnClickListener(this);
         }
-
-        private void createRecyclerView() {
-                //getting the recyclerview from xml
-                recyclerView = findViewById(R.id.recyclerView);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                //initializing the productlist
-                productList = new ArrayList<>();
-                ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
-                //phase 2 - add to array list
-                productList = new ArrayList<ItemTask>();
-                productList.add(t1);
-        }
         private void initializationCategory() {
                 ArrayCategory = new ArrayList<String>();
                 sp=getSharedPreferences("taskMaster",0);
@@ -152,6 +143,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ArrayCategory.add(part);
                 }
         }
+        private void createrecyclerViewCategory(){
+                //getting the recyclerview from xml
+                lvCategory = findViewById(R.id.recyclerViewCategoty);
+                lvCategory.setHasFixedSize(true);
+                //setting layout manager to horizontal
+                LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                lvCategory.setLayoutManager(horizontalLayoutManager);
+                //initializing the category list and adapter
+                categoryList = new ArrayList<>();
+                for(int i =0; i<ArrayCategory.size(); i++){
+                        //
+                        categoryList.add(new CategoryItemRecyclerView(ArrayCategory.get(i), 0));
+
+
+                }
+                categoryList.add(new CategoryItemRecyclerView("Home", 3));
+                categoryList.add(new CategoryItemRecyclerView("Other", 3));
+                CategoryListAdapter adapter = new CategoryListAdapter(this,categoryList);
+                lvCategory.setAdapter(adapter);
+        }
+
+        private void createRecyclerView() {
+                //getting the recyclerview from xml
+                recyclerView = findViewById(R.id.recyclerView);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                //initializing the productlist
+                productList = new ArrayList<>();
+                ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
+                //phase 2 - add to array list
+                productList = new ArrayList<ItemTask>();
+                productList.add(t1);
+        }
+
         private void createNotification() {
                 // הגדרת ההתראה לשעה 9:00
                 Calendar calendar = Calendar.getInstance();
@@ -225,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // read from firebase:
         @Override
         public void callbackUser(String user) {
-
                 tvName.setText(user);
         }
 
@@ -236,9 +260,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Taskadapter adapter = new Taskadapter(this, productList);
                 //setting adapter to recyclerview
                 recyclerView.setAdapter(adapter);
+                for (int i =0;i<ArrayCategory.size();i++){
+                        for (int j =0;j<productList.size();j++){
+                                if(ArrayCategory.get(i) == productList.get(i).getCategory()){
+                                        categoryList.get(i).setTaskCount(categoryList.get(i).getTaskCount()+1);
+                                }
+                        }
+                }
+                // category
+                // productList
+//                productList.get(j).getCategory() = ArrayCategory(i);
+//                categoryList.get(i).setcunt++;
         }
 
+        @Override
+        public void callbackCategory(ArrayList<CategoryItemRecyclerView> categoryList) {
 
+        }
 
 
         public class SetDate1 implements DatePickerDialog.OnDateSetListener

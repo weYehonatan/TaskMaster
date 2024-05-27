@@ -165,7 +165,10 @@ public class FriandsActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    @Override
+    public void callbackCategory(ArrayList<CategoryItemRecyclerView> categoryList) {
 
+    }
 
 
 }

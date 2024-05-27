@@ -11,11 +11,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class FirebaseController {
 
 
     // user connect?
-    public boolean currentUser() {
+     public boolean currentUser() {
         if (getAuth().getCurrentUser() != null)
             return true;
         return false;
@@ -65,7 +65,7 @@ public class FirebaseController {
         context.startActivity(new Intent(context, SignInActivity.class));
     }
     public void changeUserName(String newUserName){
-        if (newUserName != null) {
+        if (newUserName != null && newUserName != "") {
             if (currentUser()) {
                 getReference().child(getAuth().getCurrentUser().getUid()).child("name").setValue(newUserName)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -161,6 +161,7 @@ public class FirebaseController {
                 for (DataSnapshot data : snapshot.getChildren()) {
                     ItemTask task1 = data.getValue(ItemTask.class);
                     task1.setIdTask(data.getKey());
+                    // category!
                     taskArrayList.add(task1);
                 }
                 firebaseCallback.callbackTask(taskArrayList);
@@ -220,21 +221,21 @@ public class FirebaseController {
 
 
 
-    public void updateTask(String taskId, ItemTask updatedTask,Context mCtx ) {
-        DatabaseReference taskRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
-        // עדכון המשימה בבסיס הנתונים
-        taskRef.setValue(updatedTask)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(mCtx, "המשימה עודכנה בהצלחה", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(mCtx, "שגיאה בעדכון המשימה", Toast.LENGTH_SHORT).show();
+        public void updateTask(String taskId, ItemTask updatedTask,Context mCtx ) {
+            DatabaseReference taskRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
+            // עדכון המשימה בבסיס הנתונים
+            taskRef.setValue(updatedTask)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(mCtx, "המשימה עודכנה בהצלחה", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mCtx, "שגיאה בעדכון המשימה", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-    }
+                    });
+        }
 
     public static boolean checkDay(ItemTask task) {
         int year = task.getYearDate();
@@ -270,6 +271,34 @@ public class FirebaseController {
             }
         }
         return false;
+    }
+    public void readTasksByCategory(String category, FirebaseCallback firebaseCallback) {
+        Query query;
+        if( category.equals("all")){
+            query = getReference().child(getAuth().getCurrentUser().getUid()).child("task");
+        }
+        else {
+            query = getReference().child(getAuth().getCurrentUser().getUid()).child("task")
+                    .orderByChild("category").equalTo(category);
+        }
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<ItemTask> tasks = new ArrayList<>();
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            ItemTask task = data.getValue(ItemTask.class);
+                            if (task != null) {
+                                task.setIdTask(data.getKey());
+                                tasks.add(task);
+                            }
+                        }
+                        firebaseCallback.callbackTask(tasks);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("Firebase", "Error fetching tasks by category", error.toException());
+                    }
+                });
     }
 
 

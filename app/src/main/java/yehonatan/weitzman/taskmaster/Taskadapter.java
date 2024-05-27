@@ -195,8 +195,6 @@
                     ArrayCategory.add(part);
                 }
                 new SpinnerControler(mCtx, spinnerCategory, ArrayCategory);
-
-
                 btnSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

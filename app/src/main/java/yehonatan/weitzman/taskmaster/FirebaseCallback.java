@@ -9,5 +9,6 @@ public interface FirebaseCallback {
 
     void callbackUser(String user);
     void callbackTask(ArrayList<ItemTask> taskList);
+    void callbackCategory(ArrayList<CategoryItemRecyclerView> categoryList);
 
 }
