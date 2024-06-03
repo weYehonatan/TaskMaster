@@ -14,12 +14,12 @@ import android.widget.Toast;
 
 import java.util.List;
 
-public class FriandsAdapter extends ArrayAdapter<ItemTask> {
+public class FriendsAdapter extends ArrayAdapter<ItemTask> {
 
     FirebaseController firebaseController;
     Context context;
     List<ItemTask> objects;
-    public FriandsAdapter(Context context, int resource, int textViewResourceId, List<ItemTask> objects) {
+    public FriendsAdapter(Context context, int resource, int textViewResourceId, List<ItemTask> objects) {
         super(context, resource, textViewResourceId, objects);
 
         this.context=context;
@@ -33,7 +33,7 @@ public class FriandsAdapter extends ArrayAdapter<ItemTask> {
 
 
         LayoutInflater layoutInflater = ((Activity)context).getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.recycleritem_friands,parent,false);
+        View view = layoutInflater.inflate(R.layout.recycleritem_friends,parent,false);
         ItemTask temp = objects.get(position);
 
         TextView TitelTask = view.findViewById(R.id.tvTitle_shereTask);
@@ -51,19 +51,11 @@ public class FriandsAdapter extends ArrayAdapter<ItemTask> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    // קבלת הפריט הנוכחי
                     ItemTask itemTask = objects.get(position);
-
-                    // מחיקת הפריט מ-Firebase
                     firebaseController.deleteShereTask(itemTask.getIdCreatUser(),itemTask.getIdTask());
-
-                    // מחיקת הפריט מהרשימה המקומית
                     objects.remove(position);
-
                     // עדכון RecyclerView
                     notifyDataSetChanged();
-
-                    // הודעת אישור (אופציונלי)
                     Toast.makeText(context, "משימה נמחקה!", Toast.LENGTH_SHORT).show();
                 }
             }

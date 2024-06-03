@@ -1,10 +1,10 @@
 package yehonatan.weitzman.taskmaster;
 
-public class CategoryItemRecyclerView {
+public class ItemCategory {
     private String title;
     private int taskCount;
 
-    public CategoryItemRecyclerView(String title, int taskCount) {
+    public ItemCategory(String title, int taskCount) {
         this.title = title;
         this.taskCount = taskCount;
     }

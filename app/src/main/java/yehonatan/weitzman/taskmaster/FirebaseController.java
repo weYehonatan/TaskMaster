@@ -65,7 +65,7 @@ public class FirebaseController {
         context.startActivity(new Intent(context, SignInActivity.class));
     }
     public void changeUserName(String newUserName){
-        if (newUserName != null && newUserName != "") {
+        if (!newUserName.trim().isEmpty()) {
             if (currentUser()) {
                 getReference().child(getAuth().getCurrentUser().getUid()).child("name").setValue(newUserName)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {

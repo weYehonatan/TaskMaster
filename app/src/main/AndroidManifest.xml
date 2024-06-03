@@ -27,7 +27,7 @@
 
 
         <activity
-            android:name=".FriandsActivity"
+            android:name=".FriendsActivity"
             android:exported="false" />
 
         <activity

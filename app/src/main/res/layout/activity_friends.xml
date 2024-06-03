@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".FriendsActivity"
+    android:orientation="vertical"
     android:background="@drawable/login_background">
 
     <LinearLayout
@@ -12,24 +14,33 @@
         android:orientation="vertical"
         android:gravity="center"
         >
-        <EditText
-            android:id="@+id/etSearchTask"
+
+        <TextView
+            android:id="@+id/tvFriands"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint=" enter the ID  "
-            android:background="@drawable/rounded_corner"
+            android:fontFamily="@font/aladin"
+            android:text="Shere Task"
             android:textColor="@color/white"
+            android:textSize="60sp"
+            />
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="477dp"
             android:layout_marginTop="64dp"
-            android:textSize="25sp"
-             />
+            />
         <Button
-            android:id="@+id/btnSearchTask"
-            android:text="Search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:id="@+id/btnSerchDialog"
+            android:layout_width="82dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/baseline_content_paste_search_24"
             />
     </LinearLayout>
+
+
+
 
 
 
