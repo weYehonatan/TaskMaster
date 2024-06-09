@@ -9,12 +9,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * The type Sign in activity.
+ */
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText etEmail,etPassword;
-    Button btnSignIn,btnToSignUp;
+    /**
+     * The Et email.
+     */
+    EditText etEmail,
+    /**
+     * The Et password.
+     */
+    etPassword;
+    /**
+     * The Btn sign in.
+     */
+    Button btnSignIn,
+    /**
+     * The Btn to sign up.
+     */
+    btnToSignUp;
+    /**
+     * The Firebasecontroller.
+     */
     FirebaseController firebasecontroller;
-    SharedPreferences sp;
 
 
     public void onStart() {
@@ -50,13 +69,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initializationView() {
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etPassword = (EditText) findViewById(R.id.etPassword);
+        etEmail = (EditText) findViewById(R.id.etEmailSignUp);
+        etPassword = (EditText) findViewById(R.id.etUserPassword);
         btnSignIn = (Button) findViewById(R.id.btnSignIn);
         btnSignIn.setOnClickListener(this);
         btnToSignUp = findViewById(R.id.btnToSignUp);
         btnToSignUp.setOnClickListener(this);
-        sp=getSharedPreferences("details1",0);
     }
 
 

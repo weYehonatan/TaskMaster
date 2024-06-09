@@ -12,15 +12,49 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class FriendsActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
+/**
+ * The type Shere task activity.
+ */
+public class ShereTaskActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
+    /**
+     * The Lv.
+     */
     ListView lv;
-    ArrayList<ItemTask> fraindsList;
+    /**
+     * The Shere task list.
+     */
+    ArrayList<ItemTask> shereTaskList;
+    /**
+     * The Id user list.
+     */
     ArrayList<String> idUserList;
-    FriendsAdapter friendsAdapter;
+    /**
+     * The Shere task adapter.
+     */
+    ShereTaskAdapter shereTaskAdapter;
+    /**
+     * The Firebase controller.
+     */
     FirebaseController firebaseController;
-    Button btnSerchDialog,btnSearchTask;
+    /**
+     * The Btn serch dialog.
+     */
+    Button btnSerchDialog,
+    /**
+     * The Btn search task.
+     */
+    btnSearchTask;
+    /**
+     * The D.
+     */
     Dialog d;
+    /**
+     * The Et search task.
+     */
     EditText etSearchTask;
+    /**
+     * The Sp.
+     */
     SharedPreferences sp;
 
 
@@ -30,7 +64,7 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
+        setContentView(R.layout.activity_shere_task);
         firebaseController = new FirebaseController(this);
         btnSerchDialog = findViewById(R.id.btnSerchDialog);
         btnSerchDialog.setOnClickListener(this);
@@ -54,7 +88,7 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
             String str= sp.getString("taskMaster",null);
             editor.putString("idUserList",str + "/" + idUser);
             editor.commit();
-            friendsAdapter.notifyDataSetChanged(); // ריענון אדפטר
+            shereTaskAdapter.notifyDataSetChanged(); // ריענון אדפטר
         }
     }
 
@@ -68,12 +102,13 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
                 idUserList.add(part);
             }
             firebaseController.readShereTask(this, idUserList);
+
+
+
         }
-        ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
-        fraindsList = new ArrayList<ItemTask>();
-        fraindsList.add(t1);
+        shereTaskList = new ArrayList<ItemTask>();
         // - create adapter
-        friendsAdapter =new FriendsAdapter(this,1,1,fraindsList);
+        shereTaskAdapter =new ShereTaskAdapter(this,1,1, shereTaskList);
         //phase 4 reference to listview
         lv=findViewById(R.id.lv);
     }
@@ -93,8 +128,8 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void callbackTask(ArrayList<ItemTask> taskList) {
         if(taskList != null) {
-            friendsAdapter = new FriendsAdapter(this, 0, 0, taskList);
-            lv.setAdapter(friendsAdapter);
+            shereTaskAdapter = new ShereTaskAdapter(this, 0, 0, taskList);
+            lv.setAdapter(shereTaskAdapter);
         }
     }
 

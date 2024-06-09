@@ -13,13 +13,24 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+/**
+ * The type Spinner controler.
+ */
 public class SpinnerControler {
         private Spinner spinner;
         private ArrayList<String> items;
         private static String selected;
 
 
-        public SpinnerControler(Context context, Spinner spinner, ArrayList<String> items) {
+    /**
+     * Instantiates a new Spinner controler.
+     *
+     * @param context the context
+     * @param spinner the spinner
+     * @param items   the items
+     */
+    public SpinnerControler(Context context, Spinner spinner, ArrayList<String> items) {
             this.spinner = spinner;
             this.items = items;
 
@@ -39,6 +50,11 @@ public class SpinnerControler {
             });
         }
 
+    /**
+     * Gets selected.
+     *
+     * @return the selected
+     */
     public static String getSelected() {
         return selected;
     }

@@ -26,16 +26,43 @@
         import java.util.ArrayList;
         import java.util.Calendar;
         import java.util.List;
+
+        /**
+         * The type Taskadapter.
+         */
         public class Taskadapter extends RecyclerView.Adapter<Taskadapter.TaskViewHolder>  {
-                FirebaseController firebaseController;
-                //this context we will use to inflate the layout
+            /**
+             * The Firebase controller.
+             */
+            FirebaseController firebaseController;
+            /**
+             * The constant mCtx.
+             */
+//this context we will use to inflate the layout
                 static Context mCtx;
                 //we are storing all the products in a list
                 private List<ItemTask> productList;
-                int Dday,Dmonth,Dyear;
+            /**
+             * The Dday.
+             */
+            int Dday,
+            /**
+             * The Dmonth.
+             */
+            Dmonth,
+            /**
+             * The Dyear.
+             */
+            Dyear;
 
 
-            //getting the context and product list with constructor
+            /**
+             * Instantiates a new Taskadapter.
+             *
+             * @param mCtx        the m ctx
+             * @param productList the product list
+             */
+//getting the context and product list with constructor
                 public Taskadapter(Context mCtx, List<ItemTask> productList)
                 {
                     this.mCtx = mCtx;
@@ -99,7 +126,7 @@
                 }
                 else{
                     holder.tvLate.setBackgroundColor(Color.parseColor("#008000"));
-                    holder.tvLate.setText( R.string.check_date );
+                    holder.tvLate.setText("");
                 }
 
             }
@@ -111,14 +138,36 @@
             }
 
 
-
+            /**
+             * The type Task view holder.
+             */
             class TaskViewHolder extends RecyclerView.ViewHolder {
-                TextView tvTitle, tvLate,tvCategory;
+                /**
+                 * The Tv title.
+                 */
+                TextView tvTitle,
+                /**
+                 * The Tv late.
+                 */
+                tvLate,
+                /**
+                 * The Tv category.
+                 */
+                tvCategory;
+                /**
+                 * The Check box.
+                 */
                 CheckBox checkBox;
+
+                /**
+                 * Instantiates a new Task view holder.
+                 *
+                 * @param itemView the item view
+                 */
                 public TaskViewHolder(View itemView) {
                     super(itemView);
                     tvTitle = itemView.findViewById(R.id.tvTitle);
-                    tvCategory = itemView.findViewById(R.id.tvCategory);
+                    tvCategory = itemView.findViewById(R.id.tvCategoryRecycle);
                     tvLate = itemView.findViewById(R.id.tvLate);
                     checkBox = itemView.findViewById(R.id.checkBox_IsFinish);
                 }
@@ -131,7 +180,7 @@
                 Dialog d = new Dialog(mCtx);
                 d.setContentView(R.layout.dialog_task);
 
-                TextView tvTitle = d.findViewById(R.id.tvEditTask);
+                TextView tvTitle = d.findViewById(R.id.tvShowTask);
                 TextView tvDescription = d.findViewById(R.id.tvDescription);
                 TextView tvDate = d.findViewById(R.id.tvDate);
                 TextView tvCategory = d.findViewById(R.id.tvCategory);
@@ -171,7 +220,7 @@
                 d.setContentView(R.layout.dialog_edit_task);
 
                 EditText etTitelTask = d.findViewById(R.id.tvEditTask);
-                EditText etDescription = d.findViewById(R.id.tvDescription);
+                EditText etDescription = d.findViewById(R.id.tvEditDescription);
                 Spinner spinnerCategory = d.findViewById(R.id.spinnerEdit);
                 Button btnSave = d.findViewById(R.id.btnSaveEditTask);
                 Button btnCancel = d.findViewById(R.id.btnCancelTask);
@@ -240,8 +289,10 @@
             }
 
 
-
-        public class SetDate2 implements DatePickerDialog.OnDateSetListener
+            /**
+             * The type Set date 2.
+             */
+            public class SetDate2 implements DatePickerDialog.OnDateSetListener
         {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

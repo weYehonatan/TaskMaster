@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/general_screen"
+    android:background="@drawable/login_background"
 
     >
 
 
     <Button
-        android:id="@+id/btnEditDate"
+        android:id="@+id/btnNewDate"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="162dp"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
     <EditText
-        android:id="@+id/tvEditTask"
+        android:id="@+id/etNewTask"
         android:layout_width="205dp"
         android:layout_height="43dp"
         android:layout_gravity="center"
@@ -48,10 +48,10 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEditTask" />
+        app:layout_constraintTop_toBottomOf="@+id/etNewTask" />
 
     <Button
-        android:id="@+id/btnSaveEditTask"
+        android:id="@+id/btnSavNewTask"
         android:layout_width="102dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
@@ -62,18 +62,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerEdit"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerCaegory"
         tools:ignore="MissingConstraints" />
 
     <Spinner
-        android:id="@+id/spinnerEdit"
+        android:id="@+id/spinnerCaegory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEditDate" />
+        app:layout_constraintTop_toBottomOf="@+id/btnNewDate" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

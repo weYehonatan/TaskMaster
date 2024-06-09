@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/tvEditDescription" />
 
     <EditText
         android:id="@+id/tvEditTask"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/tvDescription"
+        android:id="@+id/tvEditDescription"
         android:layout_width="205dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="125dp"

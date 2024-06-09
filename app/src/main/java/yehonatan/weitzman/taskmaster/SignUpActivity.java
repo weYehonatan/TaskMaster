@@ -9,10 +9,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * The type Sign up activity.
+ */
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnSignUp,btnToSignIn;
-    EditText etUserEmail,etPassword,etUserName;
+    /**
+     * The Btn sign up.
+     */
+    Button btnSignUp,
+    /**
+     * The Btn to sign in.
+     */
+    btnToSignIn;
+    /**
+     * The Et user email.
+     */
+    EditText etUserEmail,
+    /**
+     * The Et password.
+     */
+    etPassword,
+    /**
+     * The Et user name.
+     */
+    etUserName;
+    /**
+     * The Firebase controller.
+     */
     FirebaseController firebaseController;
 
 
@@ -46,8 +70,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         btnSignUp.setOnClickListener(this);
         btnToSignIn = findViewById(R.id.btnToSignIn);
         btnToSignIn.setOnClickListener(this);
-        etUserEmail = (EditText)findViewById(R.id.etEmail);
-        etPassword = (EditText)findViewById(R.id.etPassword);
+        etUserEmail = (EditText)findViewById(R.id.etEmailSignUp);
+        etPassword = (EditText)findViewById(R.id.etUserPassword);
         etUserName = findViewById(R.id.etUserName);
     }
 

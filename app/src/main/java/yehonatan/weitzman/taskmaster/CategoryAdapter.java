@@ -1,58 +1,99 @@
 package yehonatan.weitzman.taskmaster;
 
-import android.app.Activity;
+
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class CategoryAdapter extends ArrayAdapter<ItemCategory> {
+/**
+ * The type Category adapter.
+ */
+public class CategoryAdapter extends  RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
+    /**
+     * The Firebase controller.
+     */
     FirebaseController firebaseController;
-    Context context;
-    List<ItemCategory> objects;
+    /**
+     * The M ctx.
+     */
+    static Context mCtx;
+    private List<ItemCategory> productList;
 
-    public CategoryAdapter(Context context, int resource, int textViewResourceId, List<ItemCategory> objects) {
-        super(context, resource, textViewResourceId, objects);
-
-        this.context=context;
-        this.objects=objects;
+    /**
+     * Instantiates a new Category adapter.
+     *
+     * @param context     the context
+     * @param productList the product list
+     */
+    public CategoryAdapter(Context context, List<ItemCategory> productList)
+    {
+        this.mCtx = context;
+        this.productList = productList;
         firebaseController = new FirebaseController();
+    }
+
+    @Override
+
+    public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //inflating and returning our view holder
+        LayoutInflater inflater = LayoutInflater.from(mCtx);
+        View view = inflater.inflate(R.layout.item_category, null);
+        return new CategoryViewHolder(view);
+
+    }
+    @Override
+    public void onBindViewHolder(CategoryViewHolder holder, int position) {
+        //getting the product of the specified position
+        ItemCategory product = productList.get(position);
+        //binding the data with the viewholder views
+        holder.tvTitle.setText(product.getTitle());
+        holder.tvCategoryNumber.setText(product.getTaskCount());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //gdgd
+            }
+        });
 
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public int getItemCount() {
+        return productList.size();
+    }
 
 
-        LayoutInflater layoutInflater = ((Activity)context).getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.item_category,parent,false);
-        ItemCategory temp = objects.get(position);
+    /**
+     * The type Category view holder.
+     */
+    class CategoryViewHolder extends RecyclerView.ViewHolder {
+        /**
+         * The Tv title.
+         */
+        TextView tvTitle,
+        /**
+         * The Tv category number.
+         */
+        tvCategoryNumber;
 
-        TextView TitelCategory = view.findViewById(R.id.tvCategoryTitle);
-        TitelCategory.setText(temp.getTitle());
+        /**
+         * Instantiates a new Category view holder.
+         *
+         * @param itemView the item view
+         */
+        public CategoryViewHolder(View itemView) {
+            super(itemView);
+            tvTitle = itemView.findViewById(R.id.tvCategoryTitle);
+            tvCategoryNumber = itemView.findViewById(R.id.tvCategoryNumber);
+        }
 
-        TextView CategoryNum = view.findViewById(R.id.tvCategoryNumber);
-        CategoryNum.setText(temp.getTaskCount());
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseController.readTasksByCategory(temp.getTitle(), (FirebaseCallback) context);
-            }
-        });
-
-
-        return view;
     }
 }
 

@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:id="@+id/tvEditTask"
+        android:id="@+id/tvShowTask"
         android:layout_width="205dp"
         android:layout_height="43dp"
         android:layout_marginStart="125dp"

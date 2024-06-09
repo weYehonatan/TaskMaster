@@ -61,6 +61,12 @@
             android:background="@drawable/rounded_corner"
             android:textColor="@color/white"
             />
+        <Button
+            android:id="@+id/btnRestartCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Restart Category"
+            />
         <TextView
             android:id="@+id/tvRename"
             android:layout_width="wrap_content"

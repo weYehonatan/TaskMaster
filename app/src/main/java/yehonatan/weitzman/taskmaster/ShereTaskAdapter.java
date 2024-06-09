@@ -14,12 +14,33 @@ import android.widget.Toast;
 
 import java.util.List;
 
-public class FriendsAdapter extends ArrayAdapter<ItemTask> {
+/**
+ * The type Shere task adapter.
+ */
+public class ShereTaskAdapter extends ArrayAdapter<ItemTask> {
 
+    /**
+     * The Firebase controller.
+     */
     FirebaseController firebaseController;
+    /**
+     * The Context.
+     */
     Context context;
+    /**
+     * The Objects.
+     */
     List<ItemTask> objects;
-    public FriendsAdapter(Context context, int resource, int textViewResourceId, List<ItemTask> objects) {
+
+    /**
+     * Instantiates a new Shere task adapter.
+     *
+     * @param context            the context
+     * @param resource           the resource
+     * @param textViewResourceId the text view resource id
+     * @param objects            the objects
+     */
+    public ShereTaskAdapter(Context context, int resource, int textViewResourceId, List<ItemTask> objects) {
         super(context, resource, textViewResourceId, objects);
 
         this.context=context;
@@ -51,6 +72,7 @@ public class FriendsAdapter extends ArrayAdapter<ItemTask> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    // קבלת הפריט הנוכחי
                     ItemTask itemTask = objects.get(position);
                     firebaseController.deleteShereTask(itemTask.getIdCreatUser(),itemTask.getIdTask());
                     objects.remove(position);

@@ -50,7 +50,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvCategory"
+            android:id="@+id/tvCategoryRecycle"
             android:layout_width="163dp"
             android:layout_height="31dp"
             android:layout_marginStart="8dp"

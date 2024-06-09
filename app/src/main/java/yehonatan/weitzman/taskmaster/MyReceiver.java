@@ -21,6 +21,9 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+/**
+ * The type My receiver.
+ */
 public class MyReceiver extends BroadcastReceiver {
 
     @Override

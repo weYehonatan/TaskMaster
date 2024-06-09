@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,23 +30,115 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
         private TextView tvName;
+        /**
+         * The Product list.
+         */
         List<ItemTask> productList;
+        /**
+         * The Category list item.
+         */
         List<ItemCategory> categoryListItem;
+        /**
+         * The Array category.
+         */
         ArrayList<String> ArrayCategory;
-        RecyclerView recyclerView;
-        ListView lvCategory;
+        /**
+         * The Recycler view.
+         */
+        RecyclerView recyclerView,
+        /**
+         * The Recycler view category.
+         */
+        recyclerViewCategory;
+        /**
+         * The Taskadapter.
+         */
+        Taskadapter taskadapter;
+        /**
+         * The Category adapter.
+         */
+        CategoryAdapter categoryAdapter;
+        /**
+         * The D.
+         */
         Dialog d;
-        ImageButton btnNewTaskToDialog,btnSettingToDialog;
-        EditText etNewTask,etAddCategory,etDescription,etRename ;
-        Button btnSaveTask,btnDate, btnSaveSetting;
+        /**
+         * The Btn new task to dialog.
+         */
+        ImageButton btnNewTaskToDialog;
+        /**
+         * The Et new task.
+         */
+        EditText etNewTask,
+        /**
+         * The Et add category.
+         */
+        etAddCategory,
+        /**
+         * The Et description.
+         */
+        etDescription,
+        /**
+         * The Et rename.
+         */
+        etRename ;
+        /**
+         * The Btn save task.
+         */
+        Button btnSaveTask, /**
+         * The Btn date.
+         */
+        btnDate, /**
+         * The Btn save setting.
+         */
+        btnSaveSetting, /**
+         * The Btn restart category.
+         */
+        btnRestartCategory;
+        /**
+         * The Firebase controller.
+         */
         FirebaseController firebaseController;
+        /**
+         * The User.
+         */
         User user;
+        /**
+         * The Item task.
+         */
         ItemTask itemTask;
-        Spinner spinner,spinnerRemove;
+        /**
+         * The Spinner.
+         */
+        Spinner spinner,
+        /**
+         * The Spinner remove.
+         */
+        spinnerRemove;
+        /**
+         * The Sp.
+         */
         SharedPreferences sp;
-        int Dday,Dmonth,Dyear;
+        /**
+         * The Dday.
+         */
+        int Dday,
+        /**
+         * The Dmonth.
+         */
+        Dmonth,
+        /**
+         * The Dyear.
+         */
+        Dyear;
+
+
+
 
 
 
@@ -65,10 +157,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // firebasecController.readShereTask(this);
                 user = new User();
 
+                createNotification();
                 initializationView();
                 createRecyclerView();
                 initializationCategory();
-                createNotification();
 //                createrecyclerViewCategory();
 
         }
@@ -96,9 +188,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         alarmManager.set(AlarmManager.RTC,System.currentTimeMillis()+4000,pendingIntent);
 
                 }
-                if (v==btnSettingToDialog) {
-                        CreatSettingDialod();
-                }
                 if (v==btnDate) {
                         Calendar systemCalender = Calendar.getInstance();
                         int year = systemCalender.get(Calendar.YEAR);
@@ -122,7 +211,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         d.dismiss();
 
                 }
+                if(v==btnRestartCategory){
+                        d.dismiss();
+                        ArrayCategory.clear();
 
+                        String str = "Home" + "/" + "Work" + "/" + "Other" + "/";
+                        SharedPreferences.Editor editor=sp.edit();
+                        editor.putString("category",str);
+                        editor.commit();
+
+                        String[] parts = str.split("/");
+                        for (String part : parts) {
+                                ArrayCategory.add(part);
+                        }
+                        Toast.makeText(this,"Restart Category",Toast.LENGTH_SHORT).show();
+
+
+                }
         }
 
 
@@ -137,33 +242,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 sp=getSharedPreferences("taskMaster",0);
                 SharedPreferences.Editor editor=sp.edit();
                 String oldCategory = sp.getString("category",null);
-                if(oldCategory == null) {
+                if(oldCategory.equals("")) {
                         editor.putString("category", "Home" + "/" + "Work" + "/" + "Other" + "/");
+                        oldCategory = "Home" + "/" + "Work" + "/" + "Other" + "/";
                 }
                 editor.commit();
 
                 String[] parts = oldCategory.split("/");
-                for (String part : parts) {
+                 for (String part : parts) {
                         ArrayCategory.add(part);
+                }
+                for(int i=0;i<ArrayCategory.size();i++){
+                        for(int j=0; j<productList.size();j++){
+                                if(!ArrayCategory.get(i).equals(productList.get(j).getCategory().toString())){
+                                    ArrayCategory.add(productList.get(j).getCategory().toString());
+                                }
+
+                        }
                 }
         }
         private void createrecyclerViewCategory(){
                 //getting the recyclerview from xml
-                lvCategory = findViewById(R.id.recyclerViewCategoty);
-                //setting layout manager to horizontal
-               //*** LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-                //initializing the category list and adapter
-                categoryListItem = new ArrayList<ItemCategory>();
+                recyclerViewCategory = findViewById(R.id.recyclerViewCategoty);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                categoryListItem = new ArrayList<>();
                 for(int i =0; i<ArrayCategory.size(); i++){
-                        //
-                        categoryListItem.add(new ItemCategory(ArrayCategory.get(i), 0));
-
-
+                        categoryListItem.add(new ItemCategory(ArrayCategory.get(i), 5));
                 }
-//                categoryListItem.add(new ItemCategory("Home", 3));
-//                categoryListItem.add(new ItemCategory("Other", 3));
-                CategoryAdapter adapter = new CategoryAdapter(this,0,0, categoryListItem);
-                lvCategory.setAdapter(adapter);
+                CategoryAdapter adapter = new CategoryAdapter(this, categoryListItem);
+                recyclerViewCategory.setAdapter(adapter);
         }
 
         private void createRecyclerView() {
@@ -199,6 +307,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                 }
         }
+
+        /**
+         * Add category.
+         *
+         * @param newCategory the new category
+         */
         public void addCategory(String newCategory){
                 String str1 = sp.getString("category",null);
                 String str2 = newCategory +"/" ;
@@ -208,39 +322,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ArrayCategory.add(newCategory);
                 editor.commit();
         }
+
+        /**
+         * Remove category.
+         *
+         * @param oldCategory the old category
+         */
         public void removeCategory(String oldCategory){
-                String str = "";
-                for(int i=0;i<ArrayCategory.size();i++){
-                        if(ArrayCategory.get(i).equals(oldCategory)){
-                                ArrayCategory.remove(i);
-                        }
-                        else {
-                                str = str+ ArrayCategory.get(i) + "/";
-                        }
-                }
-                SharedPreferences.Editor editor=sp.edit();
-                editor.putString("category",str);
-                editor.commit();
+//                String str = "";
+//                for(int i=0;i<ArrayCategory.size();i++){
+//                        if(ArrayCategory.get(i).equals(oldCategory)){
+//                                ArrayCategory.remove(i);
+//                        }
+//                        else {
+//                                str = str+ ArrayCategory.get(i) + "/";
+//                        }
+//                }
+//                SharedPreferences.Editor editor=sp.edit();
+//                editor.putString("category",str);
+//                editor.commit();
         }
 
 
-
-
-        // Dialod:
+        /**
+         * Creat new task dialod.
+         */
+// Dialod:
         public void CreatNewTaskDialod(){
                 d = new Dialog(this);
                 d.setContentView(R.layout.dialog_add_task);
                 d.setTitle("New TASK");
                 d.setCancelable(true);
-                etNewTask = (EditText) d.findViewById(R.id.tvEditTask);
+                etNewTask = (EditText) d.findViewById(R.id.etNewTask);
                 etDescription = (EditText) d.findViewById(R.id.etDescription);
-                btnSaveTask = (Button) d.findViewById(R.id.btnSaveEditTask);
+                btnSaveTask = (Button) d.findViewById(R.id.btnSavNewTask);
                 btnSaveTask.setOnClickListener(this);
-                btnDate =d.findViewById(R.id.btnEditDate);
+                btnDate =d.findViewById(R.id.btnNewDate);
                 btnDate.setOnClickListener(this);
 
 //                //  ~~~~~ spinner ~~~~~
-                spinner = (Spinner) d.findViewById(R.id.spinnerEdit);
+                spinner = (Spinner) d.findViewById(R.id.spinnerCaegory);
                 new SpinnerControler(this, spinner, ArrayCategory);
 
                 // ~~~~
@@ -248,7 +369,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-                public void CreatSettingDialod(){
+        /**
+         * Creat setting dialod.
+         */
+        public void CreatSettingDialod(){
                 d = new Dialog(this);
                 d.setContentView(R.layout.dialog_setting);
                 d.setTitle("setting");
@@ -257,6 +381,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 etRename = d.findViewById(R.id.etRename);
                 btnSaveSetting = d.findViewById(R.id.btnSaveNewCategory);
                 btnSaveSetting.setOnClickListener(this);
+                btnRestartCategory = d.findViewById(R.id.btnRestartCategory);
+                btnRestartCategory.setOnClickListener(this);
                 spinnerRemove = (Spinner) d.findViewById(R.id.spinnerRemoveCategory);
                 new SpinnerControler(this, spinnerRemove, ArrayCategory);
                 d.show();
@@ -267,31 +393,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // read from firebase:
         @Override
         public void callbackUser(String user) {
-                tvName.setText(user);
+                if (user != null)
+                        tvName.setText(user);
         }
 
         @Override
         public void callbackTask(ArrayList<ItemTask> taskList) {
                 productList = taskList;
                 //creating recyclerview adapter
-                Taskadapter adapter = new Taskadapter(this, productList);
+                taskadapter = new Taskadapter(this, productList);
                 //setting adapter to recyclerview
-                recyclerView.setAdapter(adapter);
-                for (int i =0;i<ArrayCategory.size();i++){
-                        for (int j =0;j<productList.size();j++){
-                                if(ArrayCategory.get(i).equals(productList.get(i).getCategory())){
-                                        categoryListItem.get(i).setTaskCount(categoryListItem.get(i).getTaskCount()+1);
-                                }
-                        }
-                }
+                recyclerView.setAdapter(taskadapter);
+//                for (int i =0;i<ArrayCategory.size();i++){
+//                        for (int j =0;j<productList.size();j++){
+//                                if(ArrayCategory.get(i).equals(productList.get(i).getCategory())){
+//                                        categoryListItem.get(i).setTaskCount(categoryListItem.get(i).getTaskCount()+1);
+//                                }
+//                        }
+//                        Log.d("categoryListItem", categoryListItem.get(i).getTaskCount()+" ");
+//                }
+//                categoryAdapter = new CategoryAdapter(this,categoryListItem);
+//                recyclerViewCategory.setAdapter(categoryAdapter);
 
-                // category
-                // productList
-//                productList.get(j).getCategory() = ArrayCategory(i);
-//                categoryList.get(i).setcunt++;
         }
 
 
+        /**
+         * The type Set date 1.
+         */
         public class SetDate1 implements DatePickerDialog.OnDateSetListener
         {
                 @Override
@@ -315,8 +444,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public boolean onOptionsItemSelected(MenuItem item) {
                 int id = item.getItemId();
                 //noinspection SimplifiableIfStatement
-                if (id == R.id.action_friends) {
-                        Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+                if (id == R.id.action_shere_task) {
+                        Intent intent = new Intent(MainActivity.this, ShereTaskActivity.class);
                         String shereCategory = sp.getString("category",null);
                         intent.putExtra("shereCategory",shereCategory);
                         startActivity(intent);
