@@ -30,111 +30,33 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * The type Main activity.
- */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
         private TextView tvName;
-        /**
-         * The Product list.
-         */
         List<ItemTask> productList;
-        /**
-         * The Category list item.
-         */
         List<ItemCategory> categoryListItem;
-        /**
-         * The Array category.
-         */
         ArrayList<String> ArrayCategory;
-        /**
-         * The Recycler view.
-         */
         RecyclerView recyclerView,
-        /**
-         * The Recycler view category.
-         */
         recyclerViewCategory;
-        /**
-         * The Taskadapter.
-         */
         Taskadapter taskadapter;
-        /**
-         * The Category adapter.
-         */
         CategoryAdapter categoryAdapter;
-        /**
-         * The D.
-         */
         Dialog d;
-        /**
-         * The Btn new task to dialog.
-         */
         ImageButton btnNewTaskToDialog;
-        /**
-         * The Et new task.
-         */
         EditText etNewTask,
-        /**
-         * The Et add category.
-         */
         etAddCategory,
-        /**
-         * The Et description.
-         */
         etDescription,
-        /**
-         * The Et rename.
-         */
         etRename ;
-        /**
-         * The Btn save task.
-         */
-        Button btnSaveTask, /**
-         * The Btn date.
-         */
-        btnDate, /**
-         * The Btn save setting.
-         */
-        btnSaveSetting, /**
-         * The Btn restart category.
-         */
+        Button btnSaveTask,
+        btnDate,
+        btnSaveSetting,
         btnRestartCategory;
-        /**
-         * The Firebase controller.
-         */
         FirebaseController firebaseController;
-        /**
-         * The User.
-         */
         User user;
-        /**
-         * The Item task.
-         */
         ItemTask itemTask;
-        /**
-         * The Spinner.
-         */
         Spinner spinner,
-        /**
-         * The Spinner remove.
-         */
         spinnerRemove;
-        /**
-         * The Sp.
-         */
         SharedPreferences sp;
-        /**
-         * The Dday.
-         */
         int Dday,
-        /**
-         * The Dmonth.
-         */
         Dmonth,
-        /**
-         * The Dyear.
-         */
         Dyear;
 
 
@@ -308,11 +230,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
         }
 
-        /**
-         * Add category.
-         *
-         * @param newCategory the new category
-         */
         public void addCategory(String newCategory){
                 String str1 = sp.getString("category",null);
                 String str2 = newCategory +"/" ;
@@ -323,11 +240,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.commit();
         }
 
-        /**
-         * Remove category.
-         *
-         * @param oldCategory the old category
-         */
         public void removeCategory(String oldCategory){
 //                String str = "";
 //                for(int i=0;i<ArrayCategory.size();i++){
@@ -344,10 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        /**
-         * Creat new task dialod.
-         */
-// Dialod:
+        // Dialod:
         public void CreatNewTaskDialod(){
                 d = new Dialog(this);
                 d.setContentView(R.layout.dialog_add_task);
@@ -369,9 +278,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        /**
-         * Creat setting dialod.
-         */
         public void CreatSettingDialod(){
                 d = new Dialog(this);
                 d.setContentView(R.layout.dialog_setting);
@@ -418,9 +324,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        /**
-         * The type Set date 1.
-         */
         public class SetDate1 implements DatePickerDialog.OnDateSetListener
         {
                 @Override

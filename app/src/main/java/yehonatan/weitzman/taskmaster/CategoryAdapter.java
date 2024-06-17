@@ -11,27 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-/**
- * The type Category adapter.
- */
 public class CategoryAdapter extends  RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
-    /**
-     * The Firebase controller.
-     */
     FirebaseController firebaseController;
-    /**
-     * The M ctx.
-     */
     static Context mCtx;
     private List<ItemCategory> productList;
 
-    /**
-     * Instantiates a new Category adapter.
-     *
-     * @param context     the context
-     * @param productList the product list
-     */
     public CategoryAdapter(Context context, List<ItemCategory> productList)
     {
         this.mCtx = context;
@@ -70,24 +55,10 @@ public class CategoryAdapter extends  RecyclerView.Adapter<CategoryAdapter.Categ
     }
 
 
-    /**
-     * The type Category view holder.
-     */
     class CategoryViewHolder extends RecyclerView.ViewHolder {
-        /**
-         * The Tv title.
-         */
         TextView tvTitle,
-        /**
-         * The Tv category number.
-         */
         tvCategoryNumber;
 
-        /**
-         * Instantiates a new Category view holder.
-         *
-         * @param itemView the item view
-         */
         public CategoryViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvCategoryTitle);

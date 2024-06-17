@@ -21,90 +21,51 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * The type Firebase controller.
- */
 public class FirebaseController {
     private static FirebaseAuth mAuth;
     private Context context;
     private static FirebaseDatabase DATABASE;
     private static DatabaseReference REFERENCE;
 
-    /**
-     * Instantiates a new Firebase controller.
-     */
     public FirebaseController() {
 
     }
 
-    /**
-     * Instantiates a new Firebase controller.
-     *
-     * @param context the context
-     */
     public FirebaseController(Context context) {
         this.context = context;
     }
 
 
-    /**
-     * Gets database.
-     *
-     * @return the database
-     */
     public static FirebaseDatabase getDatabase() {
         if (DATABASE == null)
             DATABASE = FirebaseDatabase.getInstance();
         return DATABASE;
     }
 
-    /**
-     * Gets reference.
-     *
-     * @return the reference
-     */
     public static DatabaseReference getReference() {
         REFERENCE = getDatabase().getReference("Users");
         return REFERENCE;
     }
 
 
-    /**
-     * Gets auth.
-     *
-     * @return the auth
-     */
     public static FirebaseAuth getAuth() {
         mAuth = FirebaseAuth.getInstance();
         return mAuth;
     }
 
 
-    /**
-     * Current user boolean.
-     *
-     * @return the boolean
-     */
-// user connect?
+    // user connect?
      public boolean currentUser() {
         if (getAuth().getCurrentUser() != null)
             return true;
         return false;
     }
 
-    /**
-     * Log out.
-     */
     public void LogOut() {
         getAuth().signOut();
         context.startActivity(new Intent(context, SignInActivity.class));
     }
 
-    /**
-     * Change user name.
-     *
-     * @param newUserName the new user name
-     */
     public void changeUserName(String newUserName){
         if (!newUserName.trim().isEmpty()) {
             if (currentUser()) {
@@ -127,13 +88,6 @@ public class FirebaseController {
     }
 
 
-    /**
-     * Creat user.
-     *
-     * @param email    the email
-     * @param password the password
-     * @param userName the user name
-     */
     public void creatUser(String email, String password, String userName) {
         getAuth().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -152,43 +106,21 @@ public class FirebaseController {
                 });
     }
 
-    /**
-     * Save task.
-     *
-     * @param itemTask the item task
-     */
     public void saveTask(ItemTask itemTask) {
         itemTask.setIdCreatUser(getAuth().getCurrentUser().getUid());
         getReference().child(getAuth().getCurrentUser().getUid()).child("task").push().setValue(itemTask);
     }
 
-    /**
-     * Delete task.
-     *
-     * @param taskId the task id
-     */
     public void deleteTask(String taskId) {
         DatabaseReference myRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
         myRef.removeValue();
     }
 
-    /**
-     * Delete shere task.
-     *
-     * @param idUser the id user
-     * @param idTask the id task
-     */
     public void deleteShereTask(String idUser,String idTask){
             getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask).removeValue();
     }
 
 
-    /**
-     * Sign in user.
-     *
-     * @param email    the email
-     * @param password the password
-     */
     public void signInUser(String email, String password) {
         getAuth().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -205,12 +137,7 @@ public class FirebaseController {
                 });
     }
 
-    /**
-     * Read user.
-     *
-     * @param firebaseCallback the firebase callback
-     */
-// readUser:
+    // readUser:
     public void readUser(FirebaseCallback firebaseCallback) {
         getReference().child(getAuth().getUid()).child("name").addValueEventListener(new ValueEventListener() {
             @Override
@@ -227,11 +154,6 @@ public class FirebaseController {
 
     }
 
-    /**
-     * Read task.
-     *
-     * @param firebaseCallback the firebase callback
-     */
     public void readTask(FirebaseCallback firebaseCallback) {
         getReference().child(getAuth().getCurrentUser().getUid()).child("task").addValueEventListener(new ValueEventListener() {
             @Override
@@ -256,22 +178,10 @@ public class FirebaseController {
 
     }
 
-    /**
-     * Save shere task.
-     *
-     * @param creatorID  the creator id
-     * @param itemTaskID the item task id
-     */
     public void saveShereTask(String creatorID, String itemTaskID) {
         getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
     }
 
-    /**
-     * Read shere task.
-     *
-     * @param firebaseCallback the firebase callback
-     * @param idUserList       the id user list
-     */
     public void readShereTask(FirebaseCallback firebaseCallback,ArrayList<String> idUserList) {
         ArrayList<ItemTask> taskArrayList = new ArrayList<>();
         for (int i = 0; i<idUserList.size();i++) {
@@ -313,13 +223,6 @@ public class FirebaseController {
     }
 
 
-    /**
-     * Update task.
-     *
-     * @param taskId      the task id
-     * @param updatedTask the updated task
-     * @param mCtx        the m ctx
-     */
     public void updateTask(String taskId, ItemTask updatedTask,Context mCtx ) {
             DatabaseReference taskRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
             // עדכון המשימה בבסיס הנתונים
@@ -336,12 +239,6 @@ public class FirebaseController {
                     });
         }
 
-    /**
-     * Check day boolean.
-     *
-     * @param task the task
-     * @return the boolean
-     */
     public static boolean checkDay(ItemTask task) {
         int year = task.getYearDate();
         int month = task.getMonthDate();
@@ -378,12 +275,6 @@ public class FirebaseController {
         return false;
     }
 
-    /**
-     * Read tasks by category.
-     *
-     * @param category         the category
-     * @param firebaseCallback the firebase callback
-     */
     public void readTasksByCategory(String category, FirebaseCallback firebaseCallback) {
         Query query;
         if( category.equals("all")){

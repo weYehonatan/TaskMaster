@@ -14,32 +14,12 @@ import android.widget.Toast;
 
 import java.util.List;
 
-/**
- * The type Shere task adapter.
- */
 public class ShereTaskAdapter extends ArrayAdapter<ItemTask> {
 
-    /**
-     * The Firebase controller.
-     */
     FirebaseController firebaseController;
-    /**
-     * The Context.
-     */
     Context context;
-    /**
-     * The Objects.
-     */
     List<ItemTask> objects;
 
-    /**
-     * Instantiates a new Shere task adapter.
-     *
-     * @param context            the context
-     * @param resource           the resource
-     * @param textViewResourceId the text view resource id
-     * @param objects            the objects
-     */
     public ShereTaskAdapter(Context context, int resource, int textViewResourceId, List<ItemTask> objects) {
         super(context, resource, textViewResourceId, objects);
 

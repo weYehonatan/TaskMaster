@@ -9,30 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-/**
- * The type Sign in activity.
- */
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    /**
-     * The Et email.
-     */
     EditText etEmail,
-    /**
-     * The Et password.
-     */
     etPassword;
-    /**
-     * The Btn sign in.
-     */
     Button btnSignIn,
-    /**
-     * The Btn to sign up.
-     */
     btnToSignUp;
-    /**
-     * The Firebasecontroller.
-     */
     FirebaseController firebasecontroller;
 
 

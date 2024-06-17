@@ -12,49 +12,16 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-/**
- * The type Shere task activity.
- */
 public class ShereTaskActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
-    /**
-     * The Lv.
-     */
     ListView lv;
-    /**
-     * The Shere task list.
-     */
     ArrayList<ItemTask> shereTaskList;
-    /**
-     * The Id user list.
-     */
     ArrayList<String> idUserList;
-    /**
-     * The Shere task adapter.
-     */
     ShereTaskAdapter shereTaskAdapter;
-    /**
-     * The Firebase controller.
-     */
     FirebaseController firebaseController;
-    /**
-     * The Btn serch dialog.
-     */
     Button btnSerchDialog,
-    /**
-     * The Btn search task.
-     */
     btnSearchTask;
-    /**
-     * The D.
-     */
     Dialog d;
-    /**
-     * The Et search task.
-     */
     EditText etSearchTask;
-    /**
-     * The Sp.
-     */
     SharedPreferences sp;
 
 

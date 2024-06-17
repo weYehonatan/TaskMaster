@@ -27,42 +27,18 @@
         import java.util.Calendar;
         import java.util.List;
 
-        /**
-         * The type Taskadapter.
-         */
         public class Taskadapter extends RecyclerView.Adapter<Taskadapter.TaskViewHolder>  {
-            /**
-             * The Firebase controller.
-             */
             FirebaseController firebaseController;
-            /**
-             * The constant mCtx.
-             */
-//this context we will use to inflate the layout
+            //this context we will use to inflate the layout
                 static Context mCtx;
                 //we are storing all the products in a list
                 private List<ItemTask> productList;
-            /**
-             * The Dday.
-             */
             int Dday,
-            /**
-             * The Dmonth.
-             */
             Dmonth,
-            /**
-             * The Dyear.
-             */
             Dyear;
 
 
-            /**
-             * Instantiates a new Taskadapter.
-             *
-             * @param mCtx        the m ctx
-             * @param productList the product list
-             */
-//getting the context and product list with constructor
+            //getting the context and product list with constructor
                 public Taskadapter(Context mCtx, List<ItemTask> productList)
                 {
                     this.mCtx = mCtx;
@@ -138,32 +114,12 @@
             }
 
 
-            /**
-             * The type Task view holder.
-             */
             class TaskViewHolder extends RecyclerView.ViewHolder {
-                /**
-                 * The Tv title.
-                 */
                 TextView tvTitle,
-                /**
-                 * The Tv late.
-                 */
                 tvLate,
-                /**
-                 * The Tv category.
-                 */
                 tvCategory;
-                /**
-                 * The Check box.
-                 */
                 CheckBox checkBox;
 
-                /**
-                 * Instantiates a new Task view holder.
-                 *
-                 * @param itemView the item view
-                 */
                 public TaskViewHolder(View itemView) {
                     super(itemView);
                     tvTitle = itemView.findViewById(R.id.tvTitle);
@@ -289,9 +245,6 @@
             }
 
 
-            /**
-             * The type Set date 2.
-             */
             public class SetDate2 implements DatePickerDialog.OnDateSetListener
         {
             @Override
