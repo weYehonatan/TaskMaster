@@ -3,6 +3,7 @@ package yehonatan.weitzman.taskmaster;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -154,20 +155,16 @@ public class FirebaseController {
 
     }
 
-    public void readTask(FirebaseCallback firebaseCallback) {
-        getReference().child(getAuth().getCurrentUser().getUid()).child("task").addValueEventListener(new ValueEventListener() {
+    public void readUserID(FirebaseCallback firebaseCallback) {
+        getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child("userID").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                ArrayList<ItemTask> taskArrayList = new ArrayList<>();
-
+                ArrayList<String> arrayUSerID = new ArrayList<>();
                 for (DataSnapshot data : snapshot.getChildren()) {
-                    ItemTask task1 = data.getValue(ItemTask.class);
-                    task1.setIdTask(data.getKey());
-                    // category!
-                    taskArrayList.add(task1);
+                    String str = data.getValue(String.class);
+                    arrayUSerID.add(str);
                 }
-                firebaseCallback.callbackTask(taskArrayList);
+                firebaseCallback.callbackUserID(arrayUSerID);
             }
 
             @Override
@@ -179,20 +176,60 @@ public class FirebaseController {
     }
 
     public void saveShereTask(String creatorID, String itemTaskID) {
-        getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
+        // ~~~~ save "itemTaskID" ~~~~
+        getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean bool = false;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    String str = data.getValue(String.class);
+                    if(str.equals(itemTaskID)){
+                        bool = true;
+                    }
+                }
+                if(!bool){
+                    getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        // ~~~~ save "creatorID" ~~~~
+        getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child("userID").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean bool = false;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    String str = data.getValue(String.class);
+                    if(str.equals(creatorID)){
+                        bool = true;
+                    }
+                }
+                if(!bool){
+                    getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child("userID").push().setValue(creatorID);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void readShereTask(FirebaseCallback firebaseCallback,ArrayList<String> idUserList) {
         ArrayList<ItemTask> taskArrayList = new ArrayList<>();
         for (int i = 0; i<idUserList.size();i++) {
             String userId = idUserList.get(i);
-            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUserList.get(i)).addValueEventListener(new ValueEventListener() {
+            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUserList.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                    taskArrayList.clear();
                     for (DataSnapshot data : snapshot.getChildren()) {
                         String keyTask = data.getValue(String.class); // get ID task
-                        getReference().child(getAuth().getUid()).child("task").child(keyTask).addValueEventListener(new ValueEventListener() {
+                        getReference().child(getAuth().getUid()).child("task").child(keyTask).addListenerForSingleValueEvent (new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
@@ -303,16 +340,6 @@ public class FirebaseController {
                     }
                 });
     }
-
-
-
-
-
-
-
-
-
-
 
 
 

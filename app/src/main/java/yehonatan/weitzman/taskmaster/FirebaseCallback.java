@@ -10,5 +10,6 @@ public interface FirebaseCallback {
     void callbackUser(String user);
 
     void callbackTask(ArrayList<ItemTask> taskList);
+    void callbackUserID(ArrayList<String> arrayUSerID);
 
 }

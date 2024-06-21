@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ShereTaskActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
     ListView lv;
@@ -51,11 +53,11 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
             String idTask = parts[1];
             firebaseController.saveShereTask(idUser,idTask);
             d.dismiss();
-            SharedPreferences.Editor editor=sp.edit();
-            String str= sp.getString("taskMaster",null);
-            editor.putString("idUserList",str + "/" + idUser);
-            editor.commit();
-            shereTaskAdapter.notifyDataSetChanged(); // ריענון אדפטר
+//            SharedPreferences.Editor editor=sp.edit();
+//            String str= sp.getString("taskMaster",null);
+//            editor.putString("idUserList",str + "/" + idUser);
+//            editor.commit();
+            firebaseController.readUserID(this);
         }
     }
 
@@ -64,19 +66,10 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
         sp=getSharedPreferences("taskMaster",0);
         String idUser = sp.getString("idUserList",null);
         if(idUser != null) {
-            String[] parts0 = idUser.split("/");
-            for (String part : parts0) {
-                idUserList.add(part);
-            }
-            firebaseController.readShereTask(this, idUserList);
-
-
-
+            firebaseController.readUserID(this);
         }
         shereTaskList = new ArrayList<ItemTask>();
-        // - create adapter
         shereTaskAdapter =new ShereTaskAdapter(this,1,1, shereTaskList);
-        //phase 4 reference to listview
         lv=findViewById(R.id.lv);
     }
 
@@ -94,10 +87,22 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
     public void callbackUser(String user) {}
     @Override
     public void callbackTask(ArrayList<ItemTask> taskList) {
+        ArrayList<ItemTask> array = new ArrayList<>();
+        array = taskList;
+
         if(taskList != null) {
-            shereTaskAdapter = new ShereTaskAdapter(this, 0, 0, taskList);
+            shereTaskAdapter = new ShereTaskAdapter(this, 0, 0, array);
             lv.setAdapter(shereTaskAdapter);
         }
+    }
+
+    @Override
+    public void callbackUserID(ArrayList<String> arrayUSerID) {
+
+        firebaseController.readShereTask(this, arrayUSerID);
+
+
+
     }
 
 

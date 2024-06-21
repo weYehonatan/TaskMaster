@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -35,34 +36,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<ItemTask> productList;
         List<ItemCategory> categoryListItem;
         ArrayList<String> ArrayCategory;
-        RecyclerView recyclerView,
-        recyclerViewCategory;
+        RecyclerView recyclerView,recyclerViewCategory;
         Taskadapter taskadapter;
         CategoryAdapter categoryAdapter;
         Dialog d;
         ImageButton btnNewTaskToDialog;
-        EditText etNewTask,
-        etAddCategory,
-        etDescription,
-        etRename ;
-        Button btnSaveTask,
-        btnDate,
-        btnSaveSetting,
-        btnRestartCategory;
+        EditText etNewTask,etAddCategory,etDescription,etRename ;
+        Button btnSaveTask,btnDate,btnSaveSetting,btnRestartCategory;
         FirebaseController firebaseController;
         User user;
         ItemTask itemTask;
-        Spinner spinner,
-        spinnerRemove;
+        Spinner spinner,spinnerRemove,spinnerReadCategory;
         SharedPreferences sp;
-        int Dday,
-        Dmonth,
-        Dyear;
-
-
-
-
-
+        int Dday,Dmonth,Dyear;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( v == btnSaveTask)
                 {
                         //saveTask to Firebase :
-                        itemTask = new ItemTask(etNewTask.getText().toString(),etDescription.getText().toString(),
-                                SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
+                        itemTask = new ItemTask(etNewTask.getText().toString(),etDescription.getText().toString(), SpinnerControler.getSelected(),Dday,Dmonth,Dyear);
                         firebaseController.saveTask(itemTask);
                         Toast.makeText(this,"The task has been added",Toast.LENGTH_LONG).show();
                         d.dismiss();
@@ -310,16 +295,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 taskadapter = new Taskadapter(this, productList);
                 //setting adapter to recyclerview
                 recyclerView.setAdapter(taskadapter);
-//                for (int i =0;i<ArrayCategory.size();i++){
-//                        for (int j =0;j<productList.size();j++){
-//                                if(ArrayCategory.get(i).equals(productList.get(i).getCategory())){
-//                                        categoryListItem.get(i).setTaskCount(categoryListItem.get(i).getTaskCount()+1);
-//                                }
-//                        }
-//                        Log.d("categoryListItem", categoryListItem.get(i).getTaskCount()+" ");
-//                }
-//                categoryAdapter = new CategoryAdapter(this,categoryListItem);
-//                recyclerViewCategory.setAdapter(categoryAdapter);
+
+        }
+
+        @Override
+        public void callbackUserID(ArrayList<String> idUserList) {
 
         }
 
