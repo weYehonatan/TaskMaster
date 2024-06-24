@@ -1,6 +1,7 @@
 package yehonatan.weitzman.taskmaster;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.provider.Settings.System.getString;
 
 
 
@@ -30,15 +31,16 @@ public class MyReceiver extends BroadcastReceiver {
         if (action != null) {
             switch (action) {
                 case "Good Morning":
-                    createNotification(context,  "Good Morning! You have tasks");
+                    createNotification(context, "Good Morning! You have tasks");
                     break;
                 case "New Task":
-                    createNotification(context,  "your task has been added");
+                    createNotification(context, "your task has been added");
                     break;
             }
         }
     }
-    private void createNotification (Context context,String message) {
+
+    private void createNotification(Context context,String message) {
         // Create an Intent to launch the main activity when the notification is clicked
         Intent mainIntent = new Intent(context, MainActivity.class);
         mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -67,4 +69,9 @@ public class MyReceiver extends BroadcastReceiver {
         assert mNotificationManager != null;
         mNotificationManager.notify(( int ) System. currentTimeMillis () , mBuilder.build()) ;
     }
+
+
+
+
+
 }

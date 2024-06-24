@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ShereTaskActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
     ListView lv;
@@ -35,9 +33,10 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shere_task);
         firebaseController = new FirebaseController(this);
-        btnSerchDialog = findViewById(R.id.btnSerchDialog);
-        btnSerchDialog.setOnClickListener(this);
-        readShereTask();
+        firebaseController.readUserID(this);
+
+
+        initializationView();
     }
 
 
@@ -52,22 +51,25 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
             String idUser = parts[0];
             String idTask = parts[1];
             firebaseController.saveShereTask(idUser,idTask);
+            firebaseController.readUserID(this);
+
             d.dismiss();
 //            SharedPreferences.Editor editor=sp.edit();
 //            String str= sp.getString("taskMaster",null);
 //            editor.putString("idUserList",str + "/" + idUser);
 //            editor.commit();
-            firebaseController.readUserID(this);
         }
     }
 
-    private void readShereTask() {
-        idUserList = new ArrayList<String>();
-        sp=getSharedPreferences("taskMaster",0);
-        String idUser = sp.getString("idUserList",null);
-        if(idUser != null) {
-            firebaseController.readUserID(this);
-        }
+    private void initializationView() {
+//        idUserList = new ArrayList<String>();
+//        sp=getSharedPreferences("taskMaster",0);
+//        String idUser = sp.getString("idUserList",null);//לא קיים בכללי
+//        if(idUser != null) {
+//            firebaseController.readUserID(this);
+//        }
+        btnSerchDialog = findViewById(R.id.btnSerchDialog);
+        btnSerchDialog.setOnClickListener(this);
         shereTaskList = new ArrayList<ItemTask>();
         shereTaskAdapter =new ShereTaskAdapter(this,1,1, shereTaskList);
         lv=findViewById(R.id.lv);
@@ -89,7 +91,6 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
     public void callbackTask(ArrayList<ItemTask> taskList) {
         ArrayList<ItemTask> array = new ArrayList<>();
         array = taskList;
-
         if(taskList != null) {
             shereTaskAdapter = new ShereTaskAdapter(this, 0, 0, array);
             lv.setAdapter(shereTaskAdapter);
@@ -98,10 +99,11 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void callbackUserID(ArrayList<String> arrayUSerID) {
-
         firebaseController.readShereTask(this, arrayUSerID);
+    }
 
-
+    @Override
+    public void callbackCategory(ArrayList<String> categoryList) {
 
     }
 

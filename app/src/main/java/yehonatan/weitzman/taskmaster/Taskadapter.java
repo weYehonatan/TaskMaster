@@ -7,6 +7,7 @@
         import android.content.Intent;
         import android.content.SharedPreferences;
         import android.graphics.Color;
+        import android.os.CountDownTimer;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -36,6 +37,8 @@
             int Dday,
             Dmonth,
             Dyear;
+            private CountDownTimer mCountDownTimer;
+
 
 
             //getting the context and product list with constructor
@@ -81,16 +84,25 @@
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
-                            // קבלת הפריט הנוכחי
-                            ItemTask itemTask = productList.get(position);
-                            // מחיקת הפריט מ-Firebase
-                            firebaseController.deleteTask(itemTask.getIdTask());
-                            // מחיקת הפריט מהרשימה המקומית
-                            productList.remove(position);
-                            // עדכון RecyclerView
-                            notifyItemRemoved(position);
-                            // הודעת אישור (אופציונלי)
-                            Toast.makeText(mCtx, "משימה נמחקה!", Toast.LENGTH_SHORT).show();
+                            //
+                            if (isChecked) {
+                                startCountDown(holder, position, product);
+                            } else {
+                                cancelCountDown(holder);
+                            }
+
+
+//
+//                            // קבלת הפריט הנוכחי
+//                            ItemTask itemTask = productList.get(position);
+//                            // מחיקת הפריט מ-Firebase
+//                            firebaseController.deleteTask(itemTask.getIdTask());
+//                            // מחיקת הפריט מהרשימה המקומית
+//                            productList.remove(position);
+//                            // עדכון RecyclerView
+//                            notifyItemRemoved(position);
+//                            // הודעת אישור (אופציונלי)
+//                            Toast.makeText(mCtx, "משימה נמחקה!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -105,6 +117,38 @@
                     holder.tvLate.setText("");
                 }
 
+            }
+
+            private void cancelCountDown(TaskViewHolder holder) {
+                if (mCountDownTimer != null) {
+                    mCountDownTimer.cancel();
+                    // אפשר לעדכן תצוגה כלשהי אם צריך
+                }
+            }
+
+            private void startCountDown(TaskViewHolder holder, int position, ItemTask product) {
+                Toast.makeText(mCtx, "You have 5 seconds to cancel it", Toast.LENGTH_SHORT).show();
+
+                mCountDownTimer = new CountDownTimer(5000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        // אפשר לעדכן תצוגה כלשהי אם צריך
+                    }
+                    @Override
+                    public void onFinish() {
+                        // בדיקה אם ה-CheckBox עדיין מסומן
+                        if (holder.checkBox.isChecked()) {
+                            // מחיקת הפריט מ-Firebase
+                            firebaseController.deleteTask(product.getIdTask());
+                            // מחיקת הפריט מהרשימה המקומית
+                            productList.remove(position);
+                            // עדכון RecyclerView
+                            notifyItemRemoved(position);
+                            // הודעת אישור (אופציונלי)
+                            Toast.makeText(mCtx, "משימה נמחקה!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }.start();
             }
 
 

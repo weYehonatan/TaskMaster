@@ -35,12 +35,29 @@
             android:textColor="@color/black"
             android:textSize="25sp" />
 
+        <Spinner
+            android:id="@+id/spinnerReadCategory"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
 
+            android:background="@drawable/rounded_corner"
+            android:textColor="@color/white"
+            />
+        <Button
+            android:id="@+id/btnSearchByCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/white"
+            android:layout_marginTop="6dp"
+
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="460dp"
+            android:layout_height="350dp"
             android:layout_marginTop="16dp"
             />
         <ImageButton

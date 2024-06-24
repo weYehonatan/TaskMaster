@@ -111,6 +111,68 @@ public class FirebaseController {
         itemTask.setIdCreatUser(getAuth().getCurrentUser().getUid());
         getReference().child(getAuth().getCurrentUser().getUid()).child("task").push().setValue(itemTask);
     }
+    public void saveCategory(String category) {
+        getReference().child(getAuth().getCurrentUser().getUid()).child("category").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean bool = false;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    String str = data.getValue(String.class);
+                    if(str.equals(category)){
+                        bool = true;
+                    }
+                }
+                if(!bool){
+                    getReference().child(getAuth().getCurrentUser().getUid()).child("category").push().setValue(category);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    public void readCategory(FirebaseCallback firebaseCallback){
+        getReference().child(getAuth().getCurrentUser().getUid()).child("category").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                ArrayList<String> categoryArrayList = new ArrayList<>();
+
+                for(DataSnapshot data:snapshot.getChildren()){
+                    String category = data.getValue(String.class);
+                    categoryArrayList.add(category);
+                }
+                firebaseCallback.callbackCategory(categoryArrayList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void deleteCategory(String category){
+        getReference().child(getAuth().getCurrentUser().getUid()).child("category").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> categoryArrayList = new ArrayList<>();
+                for(DataSnapshot data:snapshot.getChildren()){
+                    String category2 = data.getValue(String.class);
+                    if(category.equals(category2)){
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     public void deleteTask(String taskId) {
         DatabaseReference myRef = getReference().child(getAuth().getCurrentUser().getUid()).child("task").child(taskId);
@@ -118,7 +180,8 @@ public class FirebaseController {
     }
 
     public void deleteShereTask(String idUser,String idTask){
-            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask).removeValue();
+        DatabaseReference databaseReference =  getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask);
+           databaseReference.removeValue();
     }
 
 
@@ -188,7 +251,7 @@ public class FirebaseController {
                     }
                 }
                 if(!bool){
-                    getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).push().setValue(itemTaskID);
+                    getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(creatorID).child(itemTaskID).setValue(itemTaskID);
                 }
             }
             @Override

@@ -11,5 +11,6 @@ public interface FirebaseCallback {
 
     void callbackTask(ArrayList<ItemTask> taskList);
     void callbackUserID(ArrayList<String> arrayUSerID);
+    void callbackCategory(ArrayList<String> categoryList);
 
 }

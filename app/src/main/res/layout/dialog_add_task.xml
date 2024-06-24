@@ -9,6 +9,17 @@
 
     >
 
+    <Button
+        android:id="@+id/btnSpeechToText"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="62dp"
+        android:layout_marginEnd="43dp"
+        android:background="@drawable/baseline_mic_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etNewTask"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnNewDate"
@@ -30,10 +41,9 @@
         android:layout_gravity="center"
         android:layout_marginStart="103dp"
         android:layout_marginTop="64dp"
-        android:layout_marginEnd="103dp"
+        android:layout_marginEnd="15dp"
         android:hint="Enter task:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/btnSpeechToText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
