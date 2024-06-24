@@ -158,36 +158,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initializationCategory() {
-//                ArrayCategory = new ArrayList<String>();
-//                ArrayCategory.clear();
-//                sp=getSharedPreferences("taskMaster",0);
-//                SharedPreferences.Editor editor=sp.edit();
-//                String oldCategory = sp.getString("category",null);
-//                if(oldCategory.equals("")) {
-//                        editor.putString("category", "Home" + "/" + "Work" + "/" + "Other" + "/");
-//                        oldCategory = "Home" + "/" + "Work" + "/" + "Other" + "/";
-//                }
-//                editor.commit();
-//
-//                String[] parts = oldCategory.split("/");
-//                 for (String part : parts) {
-//                        ArrayCategory.add(part);
-//                }
-//                for(int i=0;i<ArrayCategory.size();i++){
-//                        for(int j=0; j<productList.size();j++){
-//                                if(!ArrayCategory.get(i).equals(productList.get(j).getCategory().toString())){
-//                                    ArrayCategory.add(productList.get(j).getCategory().toString());
-//                                }
-//
-//                        }
-//                }
-
-//                ArrayCategory = new ArrayList<String>();
-//                ArrayCategory.clear();
-//                spinnerReadCategory = (Spinner) findViewById(R.id.spinnerReadCategory);
-//                new SpinnerControler(this, spinnerReadCategory, ArrayCategory);
-//                btnSearchByCategory = findViewById(R.id.btnSearchByCategory);
-//                btnSearchByCategory.setOnClickListener(this);
         firebaseController.saveCategory("Home");
         firebaseController.saveCategory("School");
         firebaseController.saveCategory("Other");
