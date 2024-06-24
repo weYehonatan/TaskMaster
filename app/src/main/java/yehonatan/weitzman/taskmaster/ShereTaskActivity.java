@@ -15,14 +15,12 @@ import java.util.ArrayList;
 public class ShereTaskActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
     ListView lv;
     ArrayList<ItemTask> shereTaskList;
-    ArrayList<String> idUserList;
     ShereTaskAdapter shereTaskAdapter;
     FirebaseController firebaseController;
     Button btnSerchDialog,
     btnSearchTask;
     Dialog d;
     EditText etSearchTask;
-    SharedPreferences sp;
 
 
 
@@ -52,22 +50,12 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
             String idTask = parts[1];
             firebaseController.saveShereTask(idUser,idTask);
             firebaseController.readUserID(this);
-
             d.dismiss();
-//            SharedPreferences.Editor editor=sp.edit();
-//            String str= sp.getString("taskMaster",null);
-//            editor.putString("idUserList",str + "/" + idUser);
-//            editor.commit();
+
         }
     }
 
     private void initializationView() {
-//        idUserList = new ArrayList<String>();
-//        sp=getSharedPreferences("taskMaster",0);
-//        String idUser = sp.getString("idUserList",null);//לא קיים בכללי
-//        if(idUser != null) {
-//            firebaseController.readUserID(this);
-//        }
         btnSerchDialog = findViewById(R.id.btnSerchDialog);
         btnSerchDialog.setOnClickListener(this);
         shereTaskList = new ArrayList<ItemTask>();

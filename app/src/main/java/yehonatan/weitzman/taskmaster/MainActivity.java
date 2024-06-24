@@ -36,7 +36,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseCallback {
     private TextView tvName;
     List<ItemTask> productList;
-    List<ItemCategory> categoryListItem;
     ArrayList<String> ArrayCategory;
     RecyclerView recyclerView, recyclerViewCategory;
     Taskadapter taskadapter;
@@ -165,18 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void createrecyclerViewCategory() {
-        //getting the recyclerview from xml
-        recyclerViewCategory = findViewById(R.id.recyclerViewCategoty);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        categoryListItem = new ArrayList<>();
-        for (int i = 0; i < ArrayCategory.size(); i++) {
-            categoryListItem.add(new ItemCategory(ArrayCategory.get(i), 5));
-        }
-       // CategoryAdapter adapter = new CategoryAdapter(this, categoryListItem);
-       // recyclerViewCategory.setAdapter(adapter);
-    }
+
 
     private void createRecyclerView() {
         //getting the recyclerview from xml
@@ -185,10 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //initializing the productlist
         productList = new ArrayList<>();
-//                ItemTask t1 = new ItemTask("task_1",null, "home", 11, 11, 2011);
-        //phase 2 - add to array list
-//                productList = new ArrayList<ItemTask>();
-//                productList.add(t1);
+
 
     }
 
