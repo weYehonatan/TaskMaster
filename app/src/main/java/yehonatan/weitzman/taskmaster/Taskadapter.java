@@ -66,7 +66,6 @@ public class Taskadapter extends RecyclerView.Adapter<Taskadapter.TaskViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showEditDialog(product);
                 showTaskDialog(product);
             }
         });

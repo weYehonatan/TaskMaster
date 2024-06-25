@@ -33,7 +33,6 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
         firebaseController = new FirebaseController(this);
         firebaseController.readUserID(this);
 
-
         initializationView();
     }
 

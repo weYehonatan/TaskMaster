@@ -7,7 +7,7 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-public class MyService extends Service {
+public class SoundService extends Service {
     MediaPlayer mediaPlayer;
     @Nullable
     @Override

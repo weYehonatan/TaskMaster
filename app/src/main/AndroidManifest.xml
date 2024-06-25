@@ -27,7 +27,7 @@
             android:enabled="true"
             android:exported="true"></service>
         <service
-            android:name=".MyService"
+            android:name=".SoundService"
             android:enabled="true"
             android:exported="true" />
 

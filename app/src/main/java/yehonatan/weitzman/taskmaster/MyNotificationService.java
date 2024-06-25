@@ -16,7 +16,7 @@ import androidx.core.app.NotificationManagerCompat;
 public class MyNotificationService extends Service {
 
 
-    private static final int NOTIFICATION_ID = 123;
+    private static final int NOTIFICATION_ID = (int)System.currentTimeMillis();
     public static final String EXTRA_NOTIFICATION_TEXT = "notification_text";
 
     @Nullable
@@ -28,9 +28,7 @@ public class MyNotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //הפעלת התראה
-        int itemCount = getItemCountFromMainActivity();
         String notificationText = intent.getStringExtra(EXTRA_NOTIFICATION_TEXT);
-//        notificationText = "There are " + itemCount + " task in the list";
         showNotification(notificationText);
         return START_NOT_STICKY;
     }
@@ -42,7 +40,7 @@ public class MyNotificationService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default_channel_id")
-                .setSmallIcon(R.drawable.logo) // תחליף לאייקון שלך
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle("התראה חדשה")
                 .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -62,14 +60,8 @@ public class MyNotificationService extends Service {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify((int)System.currentTimeMillis(), builder.build());
-
-
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
-    private int getItemCountFromMainActivity() {
-        MainActivity mainActivity = new MainActivity();
-        return mainActivity.getRecyclerViewItemCount();
-    }
+
 }

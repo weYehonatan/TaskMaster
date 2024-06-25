@@ -1,19 +1,14 @@
 package yehonatan.weitzman.taskmaster;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -37,12 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tvName;
     List<ItemTask> productList;
     ArrayList<String> ArrayCategory;
-    RecyclerView recyclerView, recyclerViewCategory;
+    RecyclerView recyclerView;
     Taskadapter taskadapter;
     Dialog d;
     ImageButton btnNewTaskToDialog,btnSoundUp,btnSoundOff;
     EditText etNewTask, etAddCategory, etDescription, etRename;
-    Button btnSaveTask, btnDate, btnSaveSetting, btnRestartCategory, btnSearchByCategory,btnSpeechToText;
+    Button btnSaveTask, btnDate, btnSaveSetting, btnSearchByCategory,btnSpeechToText;
     FirebaseController firebaseController;
     User user;
     ItemTask itemTask;
@@ -64,15 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         firebaseController.readTasksByCategory("all", this);
         firebaseController.readUser(this);
         firebaseController.readCategory(this);
+
         user = new User();
 
-//        createNotification();
         initializationView();
         createRecyclerView();
-        initializationCategory();
-//                createrecyclerViewCategory();
-        scheduleNotificationService(this, "Daily Notification");
-
     }
 
 
@@ -86,9 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //saveTask to Firebase :
             itemTask = new ItemTask(etNewTask.getText().toString(), etDescription.getText().toString(), SpinnerControler.getSelected(), Dday, Dmonth, Dyear);
             firebaseController.saveTask(itemTask);
-            Toast.makeText(this, "The task has been added", Toast.LENGTH_LONG).show();
             d.dismiss();
-
             startNotificationService("your task has been added");
 
         }
@@ -105,36 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 firebaseController.changeUserName(etRename.getText().toString());
             }
             if (!etAddCategory.getText().toString().trim().isEmpty()) {
-                //addCategory(etAddCategory.getText().toString());
-                String s = etAddCategory.getText().toString();
-                firebaseController.saveCategory(s);
-                // Toast.makeText(this,"Category saved",Toast.LENGTH_LONG).show();
-                Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+                String str = etAddCategory.getText().toString();
+                firebaseController.saveCategory(str);
+                Toast.makeText(this, str, Toast.LENGTH_LONG).show();
             }
             if (!SpinnerControler.getSelected().isEmpty()) {
-                //removeCategory(SpinnerControler.getSelected());
                 firebaseController.deleteCategory(SpinnerControler.getSelected());
                 Toast.makeText(this, "Category removed!", Toast.LENGTH_SHORT).show();
             }
             d.dismiss();
-
-        }
-        if (v == btnRestartCategory) {
-            d.dismiss();
-            ArrayCategory.clear();
-
-            String str = "Home" + "/" + "Work" + "/" + "Other" + "/";
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString("category", str);
-            editor.commit();
-
-            String[] parts = str.split("/");
-            for (String part : parts) {
-                ArrayCategory.add(part);
-            }
-            Toast.makeText(this, "Restart Category", Toast.LENGTH_SHORT).show();
-
-
         }
         if (v == btnSearchByCategory && SpinnerControler.getSelected() != null) {
             firebaseController.readTasksByCategory(SpinnerControler.getSelected(), this);
@@ -147,21 +115,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if(v==btnSoundOff){
-            SharedPreferences.Editor editor=sp.edit();
-            editor.putBoolean("sound",false);
-            editor.commit();
-
             stopSound();
+
+            SharedPreferences.Editor editor=sp.edit();
+            editor.putBoolean("sound",false); // שמירת ההגדרות לפעם הבאה
+            editor.commit();
         }
     }
 
 
     private void startSound() {
-        Intent serviceIntent = new Intent(this,MyService.class);
+        Intent serviceIntent = new Intent(this, SoundService.class);
         startService(serviceIntent);
     }
     private void stopSound() {
-        Intent serviceIntent = new Intent(this,MyService.class);
+        Intent serviceIntent = new Intent(this, SoundService.class);
         stopService(serviceIntent);
     }
 
@@ -181,47 +149,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sp=getSharedPreferences("taskMaster01",0);
         boolean b = sp.getBoolean("sound",true);
         if(b==true)
-        {
             startSound();
-        }
-        else {
+        else
             stopSound();
-        }
-
     }
-    public static void scheduleNotificationService(Context context, String notificationText) {
-        // Get the AlarmManager service
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        // Create an Intent for the MyNotificationService
-        Intent intent = new Intent(context, MyNotificationService.class);
-        intent.putExtra(MyNotificationService.EXTRA_NOTIFICATION_TEXT, notificationText);
-        // Create a PendingIntent to be triggered when the alarm goes off
-        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        // Set the alarm to start at 9:00 AM
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        // Schedule the alarm to repeat daily
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
-    }
-    public int getRecyclerViewItemCount() {
-        if (recyclerView != null && recyclerView.getAdapter() != null) {
-            return recyclerView.getAdapter().getItemCount();
-        }
-        return 0;
-    }
-
-    private void initializationCategory() {
-//        firebaseController.saveCategory("Home");
-//        firebaseController.saveCategory("School");
-//        firebaseController.saveCategory("Other");
-    }
-
-
 
     private void createRecyclerView() {
         //getting the recyclerview from xml
@@ -230,58 +161,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //initializing the productlist
         productList = new ArrayList<>();
-
-
     }
 
-    private void createNotification() {
-        // הגדרת ההתראה לשעה 9:00
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 00);
-        calendar.set(Calendar.SECOND, 0);
-        // בדיקה אם השעה כבר עברה היום
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-            calendar.add(Calendar.DAY_OF_YEAR, 1); // הוסף יום אם השעה כבר עברה
-        }
-        // יצירת Intent ל-BroadcastReceiver
-        Intent intent = new Intent(this, MyReceiver.class);
-        intent.putExtra("MyReceiver", "Good Morning");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        // הגדרת AlarmManager
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
-    }
-
-    public void addCategory(String newCategory) {
-        String str1 = sp.getString("category", null);
-        String str2 = newCategory + "/";
-        String str3 = str1 + str2;
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("category", str3);
-        ArrayCategory.add(newCategory);
-        editor.commit();
-    }
-
-    public void removeCategory(String oldCategory) {
-//                String str = "";
-//                for(int i=0;i<ArrayCategory.size();i++){
-//                        if(ArrayCategory.get(i).equals(oldCategory)){
-//                                ArrayCategory.remove(i);
-//                        }
-//                        else {
-//                                str = str+ ArrayCategory.get(i) + "/";
-//                        }
-//                }
-//                SharedPreferences.Editor editor=sp.edit();
-//                editor.putString("category",str);
-//                editor.commit();
-    }
-
-
-    // Dialod:
     public void CreatNewTaskDialod() {
         d = new Dialog(this);
         d.setContentView(R.layout.dialog_add_task);
@@ -341,8 +222,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         etRename = d.findViewById(R.id.etRename);
         btnSaveSetting = d.findViewById(R.id.btnSaveNewCategory);
         btnSaveSetting.setOnClickListener(this);
-        btnRestartCategory = d.findViewById(R.id.btnRestartCategory);
-        btnRestartCategory.setOnClickListener(this);
         spinnerRemove = (Spinner) d.findViewById(R.id.spinnerRemoveCategory);
         new SpinnerControler(this, spinnerRemove, ArrayCategory);
         btnSoundUp = d.findViewById(R.id.btnSoundUp);
@@ -415,15 +294,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_shere_task) {
             Intent intent = new Intent(MainActivity.this, ShereTaskActivity.class);
-            //String shereCategory = sp.getString("category",null);
-            //  intent.putExtra("shereCategory",shereCategory);
             startActivity(intent);
             Toast.makeText(this, "Shere Task Activity", Toast.LENGTH_LONG).show();
-        } else if (id == R.id.action_setting) {
+        }
+        else if (id == R.id.action_setting) {
             Toast.makeText(this, "you selected setting", Toast.LENGTH_LONG).show();
             CreatSettingDialod();
-        } else if (id == R.id.action_SignOut) {
-//                        firebasecController.LogOut();
+        }
+        else if (id == R.id.action_SignOut) {
             Intent intent = new Intent(this, SignInActivity.class);
             this.startActivity(intent);
         }
