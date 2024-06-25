@@ -8,6 +8,10 @@
     android:padding="16dp"
     android:background="@drawable/login_background"
     >
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,8 +35,8 @@
             android:layout_marginTop="64dp"
             android:text="add Category:"
             android:textColor="#FFFFFF"
-            android:textSize="25sp"
-            />
+            android:textSize="25sp" />
+
         <EditText
             android:id="@+id/etAddCategory"
             android:layout_width="match_parent"
@@ -86,9 +90,34 @@
             android:textColorHint="@color/white"
             android:textSize="15sp"
             android:padding="12dp"
-
             android:inputType="text"
             />
+        <TextView
+            android:id="@+id/tvSoundSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Sound Setting:"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/btnSoundOff"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/volume_off_24"/>
+            <ImageButton
+                android:id="@+id/btnSoundUp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/volume_up_24"/>
+        </LinearLayout>
+
+
+
         <Button
             android:id="@+id/btnSaveNewCategory"
             android:layout_width="match_parent"
@@ -104,6 +133,7 @@
 
 </LinearLayout>
 
+        </ScrollView>
 
 
 

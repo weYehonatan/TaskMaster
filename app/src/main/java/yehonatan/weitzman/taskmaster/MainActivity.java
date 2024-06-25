@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView recyclerView, recyclerViewCategory;
     Taskadapter taskadapter;
     Dialog d;
-    ImageButton btnNewTaskToDialog;
+    ImageButton btnNewTaskToDialog,btnSoundUp,btnSoundOff;
     EditText etNewTask, etAddCategory, etDescription, etRename;
     Button btnSaveTask, btnDate, btnSaveSetting, btnRestartCategory, btnSearchByCategory,btnSpeechToText;
     FirebaseController firebaseController;
@@ -71,8 +71,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createRecyclerView();
         initializationCategory();
 //                createrecyclerViewCategory();
+        scheduleNotificationService(this, "Daily Notification");
 
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -86,12 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "The task has been added", Toast.LENGTH_LONG).show();
             d.dismiss();
 
-            Intent intent = new Intent(this, MyReceiver.class);
-            intent.putExtra("idTask", itemTask.getIdTask());
-            intent.putExtra("MyReceiver", "New Task");
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 1, intent, PendingIntent.FLAG_IMMUTABLE);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 4000, pendingIntent);
+            startNotificationService("your task has been added");
 
         }
         if (v == btnDate) {
@@ -144,9 +142,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(v==btnSpeechToText){
             speak();
         }
+        if(v==btnSoundUp){
+            startSound();
+
+        }
+        if(v==btnSoundOff){
+            SharedPreferences.Editor editor=sp.edit();
+            editor.putBoolean("sound",false);
+            editor.commit();
+
+            stopSound();
+        }
     }
 
 
+    private void startSound() {
+        Intent serviceIntent = new Intent(this,MyService.class);
+        startService(serviceIntent);
+    }
+    private void stopSound() {
+        Intent serviceIntent = new Intent(this,MyService.class);
+        stopService(serviceIntent);
+    }
+
+    private void startNotificationService(String notificationText){
+        Intent serviceIntent = new Intent(this, MyNotificationService.class);
+        serviceIntent.putExtra(MyNotificationService.EXTRA_NOTIFICATION_TEXT, notificationText);
+        startService(serviceIntent);  // הפעלת ה-Service
+    }
 
 
     private void initializationView() {
@@ -154,6 +177,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // ~~~~ Dialog ~~~~
         btnNewTaskToDialog = (ImageButton) findViewById(R.id.btnPlus);
         btnNewTaskToDialog.setOnClickListener(this);
+
+        sp=getSharedPreferences("taskMaster01",0);
+        boolean b = sp.getBoolean("sound",true);
+        if(b==true)
+        {
+            startSound();
+        }
+        else {
+            stopSound();
+        }
+
+    }
+    public static void scheduleNotificationService(Context context, String notificationText) {
+        // Get the AlarmManager service
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        // Create an Intent for the MyNotificationService
+        Intent intent = new Intent(context, MyNotificationService.class);
+        intent.putExtra(MyNotificationService.EXTRA_NOTIFICATION_TEXT, notificationText);
+        // Create a PendingIntent to be triggered when the alarm goes off
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Set the alarm to start at 9:00 AM
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        // Schedule the alarm to repeat daily
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
+    }
+    public int getRecyclerViewItemCount() {
+        if (recyclerView != null && recyclerView.getAdapter() != null) {
+            return recyclerView.getAdapter().getItemCount();
+        }
+        return 0;
     }
 
     private void initializationCategory() {
@@ -286,6 +345,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnRestartCategory.setOnClickListener(this);
         spinnerRemove = (Spinner) d.findViewById(R.id.spinnerRemoveCategory);
         new SpinnerControler(this, spinnerRemove, ArrayCategory);
+        btnSoundUp = d.findViewById(R.id.btnSoundUp);
+        btnSoundUp.setOnClickListener(this);
+        btnSoundOff = d.findViewById(R.id.btnSoundOff);
+        btnSoundOff.setOnClickListener(this);
         d.show();
     }
 
