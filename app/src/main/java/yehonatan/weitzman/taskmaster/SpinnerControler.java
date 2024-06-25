@@ -23,8 +23,13 @@ public class SpinnerControler {
     public SpinnerControler(Context context, Spinner spinner, ArrayList<String> items) {
             this.spinner = spinner;
             this.items = items;
+            if(!this.items.get(0).equals("")){
+                this.items.add(0,"");
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, items);
+            }
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, items);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
 

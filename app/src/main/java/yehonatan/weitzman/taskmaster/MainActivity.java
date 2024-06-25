@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         firebaseController.readCategory(this);
         user = new User();
 
-        createNotification();
+//        createNotification();
         initializationView();
         createRecyclerView();
         initializationCategory();
@@ -157,11 +157,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initializationCategory() {
-        firebaseController.saveCategory("Home");
-        firebaseController.saveCategory("School");
-        firebaseController.saveCategory("Other");
-
-
+//        firebaseController.saveCategory("Home");
+//        firebaseController.saveCategory("School");
+//        firebaseController.saveCategory("Other");
     }
 
 

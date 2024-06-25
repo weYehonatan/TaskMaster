@@ -100,6 +100,9 @@ public class FirebaseController {
 
                             Intent intent = new Intent(context, MainActivity.class);
                             context.startActivity(intent);
+                            saveCategory("Home");
+                            saveCategory("School");
+                            saveCategory("Other");
                         } else {
                             Toast.makeText(context, "eror" + task.getException(), Toast.LENGTH_SHORT).show();
                         }
@@ -112,7 +115,7 @@ public class FirebaseController {
         getReference().child(getAuth().getCurrentUser().getUid()).child("task").push().setValue(itemTask);
     }
     public void saveCategory(String category) {
-        getReference().child(getAuth().getCurrentUser().getUid()).child("category").addValueEventListener(new ValueEventListener() {
+        getReference().child(getAuth().getCurrentUser().getUid()).child("category").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean bool = false;
@@ -123,7 +126,8 @@ public class FirebaseController {
                     }
                 }
                 if(!bool){
-                    getReference().child(getAuth().getCurrentUser().getUid()).child("category").push().setValue(category);
+                    getReference().child(getAuth().getCurrentUser().getUid()).child("category").child(category).setValue(category);
+
                 }
             }
             @Override
@@ -155,23 +159,7 @@ public class FirebaseController {
         });
     }
     public void deleteCategory(String category){
-        getReference().child(getAuth().getCurrentUser().getUid()).child("category").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> categoryArrayList = new ArrayList<>();
-                for(DataSnapshot data:snapshot.getChildren()){
-                    String category2 = data.getValue(String.class);
-                    if(category.equals(category2)){
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        getReference().child(getAuth().getCurrentUser().getUid()).child("category").child(category).removeValue();
     }
 
     public void deleteTask(String taskId) {
@@ -180,8 +168,7 @@ public class FirebaseController {
     }
 
     public void deleteShereTask(String idUser,String idTask){
-        DatabaseReference databaseReference =  getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask);
-           databaseReference.removeValue();
+       getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUser).child(idTask).removeValue();
     }
 
 
@@ -286,13 +273,13 @@ public class FirebaseController {
         ArrayList<ItemTask> taskArrayList = new ArrayList<>();
         for (int i = 0; i<idUserList.size();i++) {
             String userId = idUserList.get(i);
-            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(idUserList.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+            getReference().child(getAuth().getCurrentUser().getUid()).child("shereTask").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     taskArrayList.clear();
                     for (DataSnapshot data : snapshot.getChildren()) {
                         String keyTask = data.getValue(String.class); // get ID task
-                        getReference().child(getAuth().getUid()).child("task").child(keyTask).addListenerForSingleValueEvent (new ValueEventListener() {
+                        getReference().child(userId).child("task").child(keyTask).addListenerForSingleValueEvent (new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {

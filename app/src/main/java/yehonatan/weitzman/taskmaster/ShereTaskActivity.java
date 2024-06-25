@@ -78,7 +78,7 @@ public class ShereTaskActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void callbackTask(ArrayList<ItemTask> taskList) {
         ArrayList<ItemTask> array = new ArrayList<>();
-        array = taskList;
+         array = taskList;
         if(taskList != null) {
             shereTaskAdapter = new ShereTaskAdapter(this, 0, 0, array);
             lv.setAdapter(shereTaskAdapter);
